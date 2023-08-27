@@ -2,7 +2,9 @@
 
 a [Geometry Dash](https://store.steampowered.com/app/322170/Geometry_Dash/) server reimplementation in [Rust](https://rust-lang.org), focusing on 1:1 recreations of vanilla GD features
 
-_this project is on hold until the release of 2.2 (october 2023) due to the possibly huge api changes coming up_
+_this project is in early stages. it is NOT production ready._
+
+_ONLY 2.2 is supported._
 
 ## why?
 
@@ -26,8 +28,12 @@ _these features are implemented_
 
 ### testing
 
-- run `cargo run`
+- run `cargo run <client|server>`
 
 ### building
 
-- run `cargo build`
+- run `cargo build <client|server>`
+
+## todo
+
+- our passwords are a little insecure (`argon2(sha1(password + "mI29fmAnxgTs"))`) and there isnt anything we can do about this because gpj2 is forced like that!! thanks robtop!!
