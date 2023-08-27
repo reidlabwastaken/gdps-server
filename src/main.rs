@@ -33,29 +33,29 @@ fn register_gj_account(input: Form<FormRegisterGJAccount>) -> status::Custom<&'s
     let connection = &mut establish_connection_pg();
 
     if input.userName != clean::clean(input.userName.as_ref()) {
-        return status::Custom(Status::BadRequest, "-4")
+        return status::Custom(Status::Ok, "-4")
     }
 
     if input.password.len() < 6 {
-        return status::Custom(Status::BadRequest, "-8")
+        return status::Custom(Status::Ok, "-8")
     }
 
     if input.userName.len() < 3 {
-        return status::Custom(Status::BadRequest, "-9")
+        return status::Custom(Status::Ok, "-9")
     }
 
     if input.userName.len() > 20 {
-        return status::Custom(Status::BadRequest, "-4")
+        return status::Custom(Status::Ok, "-4")
     }
 
     if input.userName.len() > 254 {
-        return status::Custom(Status::BadRequest, "-6")
+        return status::Custom(Status::Ok, "-6")
     }
 
     let account_name_usage = accounts.filter(username.eq(input.userName.clone())).count().get_result::<i64>(connection) as Result<i64, Error>;
     let account_name_used = account_name_usage.expect("Fatal database name query error") != 0;
     if account_name_used {
-        return status::Custom(Status::Conflict, "-2")
+        return status::Custom(Status::Ok, "-2")
     }
 
     let new_account = NewAccount {
@@ -68,7 +68,7 @@ fn register_gj_account(input: Form<FormRegisterGJAccount>) -> status::Custom<&'s
         .execute(connection)
         .expect("Fatal error saving the new account");
 
-    return status::Custom(Status::Created, "1")
+    return status::Custom(Status::Ok, "1")
 }
 
 #[launch]
