@@ -24,5 +24,5 @@ CREATE TABLE accounts (
     twitter_url  VARCHAR(20),
     twitch_url   VARCHAR(20),
 
-    created_at   TIMESTAMP   NOT NULL  DEFAULT CURRENT_TIMESTAMP
+    created_at   TEXT   NOT NULL  DEFAULT (TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))
 );

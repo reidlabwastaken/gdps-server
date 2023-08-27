@@ -28,12 +28,13 @@ _these features are implemented_
 
 ### testing
 
-- run `cargo run <client|server>`
+- run `cargo run run`
 
 ### building
 
-- run `cargo build <client|server>`
+- run `cargo build`
 
 ## todo
 
-- our passwords are a little insecure (`argon2(sha1(password + "mI29fmAnxgTs"))`) and there isnt anything we can do about this because gpj2 is forced like that!! thanks robtop!!
+- add login endpoint....... NOW!
+- our passwords are a little insecure (`argon2(sha1(password + "mI29fmAnxgTs"))`) and there isnt anything we can do about this because gpj2 is forced like that!! thanks robtop!! (try and find a fix anyway lul)
