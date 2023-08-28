@@ -1,0 +1,19 @@
+[general]
+# if this path is encountered during path traversal,
+# it will be removed. this is useful for instances
+# where your absolute domain path is not long enough
+# to replace boomlings.com, because you can then point
+# it at a different, longer path to fill the gap
+#
+# example:
+#   boomlings.com/database/
+#   example.com/aaaaaaaaaa/
+#               ^^^^^^^^^^^
+# leaving blank will disable this
+append_path = ""
+# where can your server be accessible?
+port = 8000
+
+[accounts]
+# allow new accounts to be created
+allow_registration = true

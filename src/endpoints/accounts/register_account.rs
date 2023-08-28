@@ -5,6 +5,7 @@ use rocket::response::status;
 use diesel::prelude::*;
 use diesel::result::Error;
 
+use crate::CONFIG;
 use crate::helpers;
 use crate::db;
 
@@ -18,6 +19,10 @@ pub struct FormRegisterAccount {
 #[post("/memaddrefix/accounts/registerGJAccount.php", data = "<input>")]
 pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
+    
+    if CONFIG.accounts.allow_registration == false {
+        return status::Custom(Status::Ok, "-1")
+    }
 
     if input.userName != helpers::clean::clean(input.userName.as_ref()) {
         return status::Custom(Status::Ok, "-4")

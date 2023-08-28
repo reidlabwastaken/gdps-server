@@ -34,5 +34,5 @@ _these features are implemented_
 
 ## todo
 
-- cache hashed passwords
-- our passwords are a little insecure (`argon2(sha1(password + "mI29fmAnxgTs"))`) and there isnt anything we can do about this because gpj2 is forced like that!! thanks robtop!! (try and find a fix anyway lul)
+- make the `append_path` option do something (atm doesnt work)
+- move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs] + cache authorization
