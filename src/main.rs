@@ -21,6 +21,7 @@ fn rocket() -> _ {
     rocket::build().mount("/", routes![
         index, 
         
+        endpoints::accounts::login_account::login_account,
         endpoints::accounts::register_account::register_account
     ])
 }

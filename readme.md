@@ -1,10 +1,8 @@
 # gdps-server
 
-a [Geometry Dash](https://store.steampowered.com/app/322170/Geometry_Dash/) server reimplementation in [Rust](https://rust-lang.org), focusing on 1:1 recreations of vanilla GD features
+a [Geometry Dash](https://store.steampowered.com/app/322170/Geometry_Dash/) server reimplementation in [Rust](https://rust-lang.org)
 
-_this project is in early stages. it is NOT production ready._
-
-_ONLY 2.2 is supported._
+this project is based off of (stolen from) the [crystal-gauntlet](https://git.oat.zone/oat/crystal-gauntlet) server
 
 ## why?
 
@@ -28,7 +26,7 @@ _these features are implemented_
 
 ### testing
 
-- run `cargo run run`
+- run `cargo run`
 
 ### building
 
@@ -36,5 +34,5 @@ _these features are implemented_
 
 ## todo
 
-- add login endpoint....... NOW!
+- cache hashed passwords
 - our passwords are a little insecure (`argon2(sha1(password + "mI29fmAnxgTs"))`) and there isnt anything we can do about this because gpj2 is forced like that!! thanks robtop!! (try and find a fix anyway lul)
