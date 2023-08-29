@@ -34,5 +34,5 @@ _these features are implemented_
 
 ## todo
 
-- make the `append_path` option do something (atm doesnt work)
-- move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs] + cache authorization
+- move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs]
+- make gjp2 authentication faster (bcrypt?)

@@ -14,7 +14,7 @@ pub struct FromLoginAccount {
     password: String
 }
 
-#[post("/memaddrefix/accounts/loginGJAccount.php", data = "<input>")]
+#[post("/accounts/loginGJAccount.php", data = "<input>")]
 pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
 

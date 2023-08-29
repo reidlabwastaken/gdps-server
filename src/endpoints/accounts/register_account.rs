@@ -16,7 +16,7 @@ pub struct FormRegisterAccount {
     email: String
 }
 
-#[post("/memaddrefix/accounts/registerGJAccount.php", data = "<input>")]
+#[post("/accounts/registerGJAccount.php", data = "<input>")]
 pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
     

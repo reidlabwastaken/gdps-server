@@ -9,8 +9,8 @@
 #   boomlings.com/database/
 #   example.com/aaaaaaaaaa/
 #               ^^^^^^^^^^^
-# leaving blank will disable this
-append_path = ""
+# leaving as "/" will disable this
+append_path = "/"
 # where can your server be accessible?
 port = 8000
 

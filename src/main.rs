@@ -25,8 +25,9 @@ fn rocket() -> _ {
     rocket::build()
         .configure(rocket::Config::figment().merge(("port", CONFIG.general.port)))
         .mount("/", routes![
-            index, 
-            
+            index,
+        ])
+        .mount(CONFIG.general.append_path.as_str(), routes![
             endpoints::accounts::login_account::login_account,
             endpoints::accounts::register_account::register_account
         ])
