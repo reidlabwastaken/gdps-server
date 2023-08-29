@@ -13,5 +13,5 @@ pub fn get_user_id_from_account_id(ext_id: i32) -> i32 {
         .get_result::<i32>(connection)
         .expect("No user associated with account?!?!?");
 
-    user_id
+    return user_id
 }
