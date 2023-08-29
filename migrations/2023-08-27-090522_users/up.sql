@@ -28,7 +28,6 @@ CREATE TABLE users (
     wave         INTEGER  NOT NULL  DEFAULT 0,
     robot        INTEGER  NOT NULL  DEFAULT 0,
     spider       INTEGER  NOT NULL  DEFAULT 0,
-    swing_copter INTEGER  NOT NULL  DEFAULT 0,
     explosion    INTEGER  NOT NULL  DEFAULT 0,
     special      INTEGER  NOT NULL  DEFAULT 0,
     glow         INTEGER  NOT NULL  DEFAULT 0,

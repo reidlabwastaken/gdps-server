@@ -62,7 +62,6 @@ pub struct User {
     pub wave: i32,
     pub robot: i32,
     pub spider: i32,
-    pub swing_copter: i32,
     pub explosion: i32,
     pub special: i32,
     pub glow: i32,

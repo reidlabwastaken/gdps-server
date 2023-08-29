@@ -1,6 +1,7 @@
 #![feature(decl_macro)]
 #![feature(lazy_cell)]
 
+#[macro_use] extern crate maplit;
 #[macro_use] extern crate rocket;
 
 mod db;
@@ -29,6 +30,8 @@ fn rocket() -> _ {
         ])
         .mount(CONFIG.general.append_path.as_str(), routes![
             endpoints::accounts::login_account::login_account,
-            endpoints::accounts::register_account::register_account
+            endpoints::accounts::register_account::register_account,
+
+            endpoints::users::get_users::get_users
         ])
 }

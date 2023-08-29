@@ -47,7 +47,6 @@ diesel::table! {
         wave -> Int4,
         robot -> Int4,
         spider -> Int4,
-        swing_copter -> Int4,
         explosion -> Int4,
         special -> Int4,
         glow -> Int4,
