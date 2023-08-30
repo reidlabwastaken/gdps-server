@@ -88,8 +88,6 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
     let response = if results.is_empty() {
         String::from("-1")
     } else {
-        println!("{:?}", results);
-        println!("{:?}", vec![results.join("|"), format!("{}:{}:10", amount, input.page * 10)].join("#"));
         vec![results.join("|"), format!("{}:{}:10", amount, input.page * 10)].join("#")
     };
 
