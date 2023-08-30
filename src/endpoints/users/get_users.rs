@@ -88,7 +88,9 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
     let response = if amount < 1 {
         String::from("-1")
     } else {
-        vec![results.join("|"), format!("{}:#{}:10", amount, input.page * 10)].join("#")
+        println!("{:?}", results);
+        println!("{:?}", vec![results.join("|"), format!("{}:{}:10", amount, input.page * 10)].join("#"));
+        vec![results.join("|"), format!("{}:{}:10", amount, input.page * 10)].join("#")
     };
 
     return status::Custom(Status::Ok, Box::leak(response.into_boxed_str()))

@@ -34,6 +34,6 @@ _these features are implemented_
 
 ## todo
 
-- get users multiple pages
+- find out why the last users colors in getusers are broken????
 - move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs]
 - make gjp2 authentication faster (bcrypt?)
