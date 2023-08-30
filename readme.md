@@ -34,6 +34,6 @@ _these features are implemented_
 
 ## todo
 
-- ___fix the fucking get users for usernames!!!!___
+- get users multiple pages
 - move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs]
 - make gjp2 authentication faster (bcrypt?)
