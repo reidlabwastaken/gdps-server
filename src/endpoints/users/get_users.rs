@@ -85,7 +85,7 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
         .get_result::<i64>(connection)
         .expect("Error querying user count");
 
-    let response = if amount < 1 {
+    let response = if results.is_empty() {
         String::from("-1")
     } else {
         println!("{:?}", results);
