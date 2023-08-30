@@ -30,5 +30,6 @@ impl Config {
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
     let config = Config::load_from_file("config.toml");
-    config
+    
+    return config;
 });
