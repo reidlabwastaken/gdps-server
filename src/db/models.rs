@@ -73,7 +73,6 @@ pub struct User {
     pub is_banned_upload: i32
 }
 
-// TODO: err uhh we might need to make changes because green users 😀😀😀 im gonna commit suicide
 #[derive(Insertable, Deserialize)]
 #[diesel(table_name = users)]
 pub struct NewUser {
