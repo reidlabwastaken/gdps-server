@@ -34,6 +34,6 @@ _these features are implemented_
 
 ## todo
 
-- find out why the last users colors in getusers are broken????
+- find out why the last user's colors in getusers are broken???? (might be rubrub issue !!)
 - move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs]
 - make gjp2 authentication faster (bcrypt?)
