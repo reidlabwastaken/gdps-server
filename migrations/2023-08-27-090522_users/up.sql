@@ -6,7 +6,9 @@ CREATE TABLE users (
     account_id    INTEGER  references accounts(id),
     registered    INTEGER  NOT NULL,
 
-    username  TEXT  NOT NULL  COLLATE case_insensitive,
+    -- idk why but we get weird errors if we use `COLLATE case_insensitive`
+    -- maybe troubleshoot later, this works fine for now.
+    username  TEXT  NOT NULL, -- COLLATE case_insensitive,
 
     stars           INTEGER  NOT NULL  DEFAULT 0,
     demons          INTEGER  NOT NULL  DEFAULT 0,

@@ -3,7 +3,6 @@ use rocket::http::Status;
 use rocket::response::status;
 
 use diesel::prelude::*;
-use diesel::result::Error;
 
 use crate::helpers;
 use crate::db;
@@ -14,7 +13,7 @@ pub struct FormGetUsers {
     str: String
 }
 
-#[post("/accounts/getGJUsers20.php", data = "<input>")]
+#[post("/getGJUsers20.php", data = "<input>")]
 pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
 
@@ -22,53 +21,75 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
     use crate::schema::users::dsl::*;
     use crate::models::User;
 
-    let mut query = users.into_boxed();
+    let mut query_users = users.into_boxed();
 
     match input.str.parse::<i32>() {
-        Ok(id_value) => query = query.filter(id.eq(id_value)),
-        Err(_) => query = query.filter(username.like(input.str.to_owned() + "%"))
+        Ok(id_value) => query_users = query_users.filter(id.eq(id_value)),
+        Err(_) => query_users = query_users.filter(username.ilike(input.str.to_owned() + "%"))
     };
 
-    let results = query
-        .order(stars.desc())
-        .limit(10)
-        .offset(input.page * 10)
-        .get_result::<User, >(connection)
-        .expect("Fatal error loading users");
+    let mut results: Vec<String> = vec![];
 
-    let response = helpers::format::format(hashmap! {
-        1 => results.username,
-        2 => results.id.to_string(),
-        3 => results.stars.to_string(),
-        4 => results.demons.to_string(),
-        8 => results.creator_points.to_string(),
-        9 => {
-            vec![
-                results.cube,
-                results.ship,
-                results.ball,
-                results.ufo,
-                results.wave,
-                results.robot
-            ][results.icon_type as usize].to_string()
-        },
-        10 => results.color1.to_string(),
-        11 => results.color2.to_string(),
-        13 => results.coins.to_string(),
-        14 => results.icon_type.to_string(),
-        15 => results.special.to_string(),
-        16 => {
-            match results.account_id {
-                Some(account_id_value) => account_id_value.to_string(),
-                None => match results.udid {
-                    Some(udid_value) => udid_value.to_string(),
-                    None => panic!("user has no account_id or udid?!?!?")
+    for result in {
+        query_users
+            .order(stars.desc())
+            .offset(input.page * 10)
+            .limit(10)
+            .get_results::<User, >(connection)
+            .expect("Fatal error loading users")
+    } {
+        let formatted_result = helpers::format::format(hashmap! {
+            1 => result.username,
+            2 => result.id.to_string(),
+            3 => result.stars.to_string(),
+            4 => result.demons.to_string(),
+            8 => result.creator_points.to_string(),
+            9 => {
+                vec![
+                    result.cube,
+                    result.ship,
+                    result.ball,
+                    result.ufo,
+                    result.wave,
+                    result.robot
+                ][result.icon_type as usize].to_string()
+            },
+            10 => result.color1.to_string(),
+            11 => result.color2.to_string(),
+            13 => result.coins.to_string(),
+            14 => result.icon_type.to_string(),
+            15 => result.special.to_string(),
+            16 => {
+                match result.account_id {
+                    Some(account_id_value) => account_id_value.to_string(),
+                    None => match result.udid {
+                        Some(udid_value) => udid_value.to_string(),
+                        None => panic!("user has no account_id or udid?!?!?")
+                    }
                 }
             }
-        }
-    });
+        });
 
-    println!("{}", response);
+        results.push(formatted_result)
+    };
 
-    return status::Custom(Status::Ok, "1")
+    let mut query_users_count = users.into_boxed();
+
+    match input.str.parse::<i32>() {
+        Ok(id_value) => query_users_count = query_users_count.filter(id.eq(id_value)),
+        Err(_) => query_users_count = query_users_count.filter(username.ilike(input.str.to_owned() + "%"))
+    };
+
+    let amount = query_users_count
+        .count()
+        .get_result::<i64>(connection)
+        .expect("Error querying user count");
+
+    let response = if amount < 1 {
+        String::from("-1")
+    } else {
+        vec![results.join("|"), format!("{}:#{}:10", amount, input.page * 10)].join("#")
+    };
+
+    return status::Custom(Status::Ok, Box::leak(response.into_boxed_str()))
 }
