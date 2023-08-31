@@ -60,7 +60,7 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
 
         let new_account = NewAccount {
             username: input.userName.clone(),
-            gjp2: helpers::gjp2::get_gjp2_hashed(input.password.clone()),
+            gjp2: helpers::gjp::get_gjp2_hashed(input.password.clone()),
             email: input.email.clone()
         };
         inserted_account = diesel::insert_into(accounts)

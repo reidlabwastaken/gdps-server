@@ -30,6 +30,7 @@ pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static s
         return status::Custom(Status::Ok, "-9")
     }
 
+    // account verification
     {
         use crate::schema::accounts::dsl::*;
 
@@ -42,7 +43,7 @@ pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static s
             Ok(account_id_gjp2) => {
                 let user_id = helpers::accounts::get_user_id_from_account_id(account_id_gjp2.0);
 
-                match verify_password(helpers::gjp2::get_gjp2(input.password.clone()).as_bytes(), account_id_gjp2.1.as_str()) {
+                match verify_password(helpers::gjp::get_gjp2(input.password.clone()).as_bytes(), account_id_gjp2.1.as_str()) {
                     Ok(_) => return status::Custom(Status::Ok, 
                         Box::leak(format!("{},{}", account_id_gjp2.0, user_id).into_boxed_str())
                     ),
