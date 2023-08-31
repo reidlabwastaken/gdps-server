@@ -34,5 +34,4 @@ _these features are implemented_
 
 ## todo
 
-- fix gd not parsing the response from get_users correctly (sometimes has a hashtag in it? sometimes not? idfk)
 - move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs]
