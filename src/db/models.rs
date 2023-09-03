@@ -80,3 +80,43 @@ pub struct NewUser {
     pub username: String,
     pub registered: i32
 }
+
+#[derive(Queryable, Serialize)]
+pub struct Level {
+    pub id: i32,
+
+    pub created_at: String,
+    pub modified_at: String,
+
+    pub name: String,
+
+    pub user_id: i32,
+
+    pub description: String,
+    pub original: Option<i32>,
+    pub game_version: i32,
+    pub binary_version: i32,
+    pub password: Option<String>,
+    pub requested_stars: Option<i32>,
+    pub unlisted: i32,
+    pub version: i32,
+    pub extra_data: Vec<u8>,
+    pub level_info: Vec<u8>,
+    pub editor_time: i32,
+    pub editor_time_copies: i32,
+    pub song_id: i32,
+    pub length: i32,
+    pub objects: i32,
+    pub coins: i32,
+    pub has_ldm: i32,
+    pub two_player: i32,
+    pub downloads: i32,
+    pub likes: i32,
+    pub difficulty: Option<i32>,
+    pub community_difficulty: Option<i32>,
+    pub demon_difficulty: Option<i32>,
+    pub stars: Option<i32>,
+    pub featured: i32,
+    pub epic: i32,
+    pub rated_coins: i32
+}

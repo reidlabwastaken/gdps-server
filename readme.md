@@ -34,4 +34,6 @@ _these features are implemented_
 
 ## todo
 
+- green name users (fuck green names!!)
 - move authorization logic to (./src/helpers/accounts.rs)[./src/helpers/accounts.rs]
+- maybe swap to timestamp type instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!)

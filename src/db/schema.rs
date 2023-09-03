@@ -23,6 +23,45 @@ diesel::table! {
 }
 
 diesel::table! {
+    levels (id) {
+        id -> Int4,
+        created_at -> Text,
+        modified_at -> Text,
+        #[max_length = 20]
+        name -> Varchar,
+        user_id -> Int4,
+        #[max_length = 140]
+        description -> Varchar,
+        original -> Nullable<Int4>,
+        game_version -> Int4,
+        binary_version -> Int4,
+        password -> Nullable<Text>,
+        requested_stars -> Nullable<Int4>,
+        unlisted -> Int4,
+        version -> Int4,
+        extra_data -> Bytea,
+        level_info -> Bytea,
+        editor_time -> Int4,
+        editor_time_copies -> Int4,
+        song_id -> Int4,
+        length -> Int4,
+        objects -> Int4,
+        coins -> Int4,
+        has_ldm -> Int4,
+        two_player -> Int4,
+        downloads -> Int4,
+        likes -> Int4,
+        difficulty -> Nullable<Int4>,
+        community_difficulty -> Nullable<Int4>,
+        demon_difficulty -> Nullable<Int4>,
+        stars -> Nullable<Int4>,
+        featured -> Int4,
+        epic -> Int4,
+        rated_coins -> Int4,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Int4,
         udid -> Nullable<Text>,
@@ -57,9 +96,11 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(levels -> users (user_id));
 diesel::joinable!(users -> accounts (account_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     accounts,
+    levels,
     users,
 );
