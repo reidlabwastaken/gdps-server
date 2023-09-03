@@ -66,6 +66,7 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
             gjp2: generate_hash(helpers::encryption::get_gjp2(input.password.clone())),
             email: input.email.clone()
         };
+
         inserted_account = diesel::insert_into(accounts)
             .values(&new_account)
             .get_result::<Account, >(connection)
@@ -83,6 +84,7 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
             username: input.userName.clone(),
             registered: 1
         };
+        
         diesel::insert_into(users)
             .values(&new_user)
             .get_result::<User, >(connection)
