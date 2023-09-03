@@ -7,6 +7,7 @@ pub struct Account {
     pub id: i32,
 
     pub username: String,
+    pub password: String,
     pub gjp2: String,
     pub email: String,
 
@@ -29,7 +30,8 @@ pub struct Account {
 pub struct NewAccount {
     pub username: String,
     pub gjp2: String,
-    pub email: String
+    pub password: String,
+    pub email: String,
 }
 
 #[derive(Queryable, Serialize)]

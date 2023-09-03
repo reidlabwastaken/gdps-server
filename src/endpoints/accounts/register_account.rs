@@ -5,6 +5,8 @@ use rocket::response::status;
 use diesel::prelude::*;
 use diesel::result::Error;
 
+use password_auth::generate_hash;
+
 use crate::CONFIG;
 use crate::helpers;
 use crate::db;
@@ -60,7 +62,8 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
 
         let new_account = NewAccount {
             username: input.userName.clone(),
-            gjp2: helpers::encryption::get_gjp2_hashed(input.password.clone()),
+            password: generate_hash(input.password.clone()),
+            gjp2: generate_hash(helpers::encryption::get_gjp2(input.password.clone())),
             email: input.email.clone()
         };
         inserted_account = diesel::insert_into(accounts)

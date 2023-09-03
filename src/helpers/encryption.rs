@@ -14,15 +14,11 @@ pub fn cyclic_xor_string(string: &str, key: &str) -> String {
     let data = string.as_bytes();
     let key_bytes = key.as_bytes();
     let result_bytes = cyclic_xor(data, key_bytes);
-    let result_str = String::from_utf8(result_bytes).expect("invalid UTF-8 sequence (L)");
+    let result_str = String::from_utf8(result_bytes).expect("invalid UTF-8 sequence (how did this happen?)");
 
     return String::from(result_str);
 }
 
 pub fn get_gjp2(password: String) -> String {
     return Sha1::default().digest(String::from(password + "mI29fmAnxgTs").as_bytes()).to_hex();
-}
-
-pub fn get_gjp2_hashed(password: String) -> String {
-    return generate_hash(get_gjp2(password))
 }

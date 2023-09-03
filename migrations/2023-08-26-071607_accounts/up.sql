@@ -9,6 +9,7 @@ CREATE TABLE accounts (
 
     username  VARCHAR(20)   NOT NULL  COLLATE case_insensitive  UNIQUE,
     gjp2      TEXT          NOT NULL, -- argon2 hashed (rubrub uses bcrypt but oh well)
+    password  TEXT          NOT NULL, -- argon2 hashed (rubrub uses bcrypt but oh well)
     email     VARCHAR(254)  NOT NULL,
 
     -- todo: swap to proper rank system

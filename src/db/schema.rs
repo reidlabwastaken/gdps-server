@@ -6,6 +6,7 @@ diesel::table! {
         #[max_length = 20]
         username -> Varchar,
         gjp2 -> Text,
+        password -> Text,
         #[max_length = 254]
         email -> Varchar,
         is_admin -> Int4,

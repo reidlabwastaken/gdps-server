@@ -34,18 +34,18 @@ pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static s
     {
         use crate::schema::accounts::dsl::*;
 
-        let account_id_gjp2_result = accounts
-            .select((id, gjp2))
+        let account_id_password_result = accounts
+            .select((id, password))
             .filter(username.eq(input.userName.clone()))
             .get_result::<(i32, String)>(connection);
 
-        match account_id_gjp2_result {
-            Ok(account_id_gjp2) => {
-                let user_id = helpers::accounts::get_user_id_from_account_id(account_id_gjp2.0);
+        match account_id_password_result {
+            Ok(account_id_password) => {
+                let user_id = helpers::accounts::get_user_id_from_account_id(account_id_password.0);
 
-                match verify_password(helpers::encryption::get_gjp2(input.password.clone()).as_bytes(), account_id_gjp2.1.as_str()) {
+                match verify_password(input.password.clone().as_bytes(), account_id_password.1.as_str()) {
                     Ok(_) => return status::Custom(Status::Ok, 
-                        Box::leak(format!("{},{}", account_id_gjp2.0, user_id).into_boxed_str())
+                        Box::leak(format!("{},{}", account_id_password.0, user_id).into_boxed_str())
                     ),
                     Err(_) => return status::Custom(Status::Ok, "-11")
                 };
