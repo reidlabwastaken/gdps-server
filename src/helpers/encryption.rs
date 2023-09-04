@@ -1,7 +1,7 @@
 use sha::sha1::Sha1;
 use sha::utils::{Digest, DigestExt};
 
-use password_auth::generate_hash;
+use base64::{Engine as _, engine::general_purpose};
 
 pub fn cyclic_xor(data: &[u8], key: &[u8]) -> Vec<u8> {
     data.iter()
@@ -21,4 +21,10 @@ pub fn cyclic_xor_string(string: &str, key: &str) -> String {
 
 pub fn get_gjp2(password: String) -> String {
     return Sha1::default().digest(String::from(password + "mI29fmAnxgTs").as_bytes()).to_hex();
+}
+
+pub fn decode_gjp(gjp: String) -> String {
+    let base64_decoded = String::from_utf8(general_purpose::STANDARD_NO_PAD.decode(gjp).expect("couldn't decode base64")).expect("invalid UTF-8 sequence (how)");
+    let xor_decoded = cyclic_xor_string(&base64_decoded, "37526");
+    return xor_decoded
 }
