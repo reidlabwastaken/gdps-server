@@ -34,7 +34,7 @@ _these features are implemented_
 
 ## todo
 
-- clean auth function (wtf is that!)
-- add udid auth to auth function
+- probably work on the code warnings we get hehe
+- <small>green name users...</small> (add udid auth to auth function, use userName instead of accountID in uploading levels, and it goes on and on and on <small>and on...</small>)
 - add level parsing
 - maybe swap to timestamp type instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!)

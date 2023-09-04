@@ -32,6 +32,8 @@ fn rocket() -> _ {
             endpoints::accounts::login_account::login_account,
             endpoints::accounts::register_account::register_account,
 
-            endpoints::users::get_users::get_users
+            endpoints::users::get_users::get_users,
+
+            endpoints::levels::upload_level::upload_level
         ])
 }
