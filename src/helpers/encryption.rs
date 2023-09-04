@@ -24,7 +24,7 @@ pub fn get_gjp2(password: String) -> String {
 }
 
 pub fn decode_gjp(gjp: String) -> String {
-    let base64_decoded = String::from_utf8(general_purpose::STANDARD_NO_PAD.decode(gjp).expect("couldn't decode base64")).expect("invalid UTF-8 sequence (how)");
+    let base64_decoded = String::from_utf8(general_purpose::STANDARD.decode(gjp).expect("couldn't decode base64")).expect("invalid UTF-8 sequence (how)");
     let xor_decoded = cyclic_xor_string(&base64_decoded, "37526");
     return xor_decoded
 }
