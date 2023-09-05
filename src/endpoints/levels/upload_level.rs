@@ -1,4 +1,3 @@
-use password_auth::verify_password;
 use rocket::form::Form;
 use rocket::http::Status;
 use rocket::response::status;

@@ -34,8 +34,7 @@ _these features are implemented_
 
 ## todo
 
+- swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!)
+- patch `upload_level` to use 2.2 unlisted(honsetly idk what this is but it exists?)
+- add level parsing (`upload_level` can use the correct `length`, `objects`, `coins`, and `two_player`)
 - <small>green name users...</small>
-- patch uploadlevel to use 2.2 unlisted(honsetly idk what this is)
-- clean up uploadlevel
-- add level parsing
-- maybe swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!)
