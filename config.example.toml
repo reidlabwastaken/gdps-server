@@ -17,3 +17,7 @@ port = 8000
 [accounts]
 # allow new accounts to be created
 allow_registration = true
+
+[db]
+# path for your data to be stored
+data_folder = "data"

@@ -122,3 +122,28 @@ pub struct Level {
     pub epic: i32,
     pub rated_coins: i32
 }
+
+#[derive(Insertable, Deserialize)]
+#[diesel(table_name = levels)]
+pub struct NewLevel {
+    pub name: String,
+    pub user_id: i32,
+    pub description: String,
+    pub original: i32,
+    pub game_version: i32,
+    pub binary_version: i32,
+    pub password: Option<String>,
+    pub requested_stars: i32,
+    pub unlisted: i32,
+    pub version: i32,
+    pub extra_data: Vec<u8>,
+    pub level_info: Vec<u8>,
+    pub editor_time: i32,
+    pub editor_time_copies: i32,
+    pub song_id: i32,
+    pub length: i32,
+    pub objects: i32,
+    pub coins: i32,
+    pub has_ldm: i32,
+    pub two_player: i32
+}

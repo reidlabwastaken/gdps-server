@@ -30,11 +30,14 @@ _these features are implemented_
 
 ### building
 
-- run `cargo build`
+- run `cargo build --release`
 
 ## todo
 
 - probably work on the code warnings we get hehe
 - <small>green name users...</small> (add udid auth to auth function, use userName instead of accountID in uploading levels, and it goes on and on and on <small>and on...</small>)
+- patch uploadlevel to fix color tags, use 1.9 [levelInfo](https://github.com/Cvolton/GMDprivateServer/blob/master/incl/levels/uploadGJLevel.php#L56)???, and use 2.2 unlisted??
+- clean up uploadlevel
+- add updating levels
 - add level parsing
 - maybe swap to timestamp type instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!)

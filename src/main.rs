@@ -4,6 +4,8 @@
 #[macro_use] extern crate maplit;
 #[macro_use] extern crate rocket;
 
+use std::fs;
+
 mod db;
 use db::*;
 
@@ -23,6 +25,8 @@ fn index() -> String {
 
 #[launch]
 fn rocket() -> _ {
+    fs::create_dir_all(&CONFIG.db.data_folder).expect("failed to create data directory!");
+    fs::create_dir_all(format!("{}/levels", &CONFIG.db.data_folder)).expect("failed to create data directory for levels");
     rocket::build()
         .configure(rocket::Config::figment().merge(("port", CONFIG.general.port)))
         .mount("/", routes![
