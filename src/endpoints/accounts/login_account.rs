@@ -20,7 +20,7 @@ pub struct FromLoginAccount {
 pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
 
-    if input.userName != helpers::clean::clean(input.userName.as_ref()) {
+    if input.userName != helpers::clean::clean_no_space(input.userName.as_ref()) {
         return status::Custom(Status::Ok, "-4")
     }
 

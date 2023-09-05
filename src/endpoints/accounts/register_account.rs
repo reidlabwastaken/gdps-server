@@ -26,7 +26,7 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
         return status::Custom(Status::Ok, "-1")
     }
 
-    if input.userName != helpers::clean::clean(input.userName.as_ref()) {
+    if input.userName != helpers::clean::clean_no_space(input.userName.as_ref()) {
         return status::Custom(Status::Ok, "-4")
     }
 

@@ -96,17 +96,39 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                     return status::Custom(Status::Ok, "-1")
                 }
 
-                // TODO: add level to db, file
+                let updated_level = diesel::update(levels)
+                    .filter(id.eq(input.levelID))
+                    .set((
+                        description.eq(description_val.chars().take(140).collect::<String>()),
+                        password.eq(input.password.clone()),
+                        requested_stars.eq(match input.requestedStars {
+                            Some(requested_stars_val) => requested_stars_val.clamp(0, 10),
+                            None => 0
+                        }),
+                        version.eq(input.levelVersion),
+                        extra_data.eq(extra_string.as_bytes().to_owned()),
+                        level_info.eq(input.levelInfo.clone().into_bytes()),
+                        editor_time.eq(input.wt.unwrap_or(0)),
+                        editor_time_copies.eq(input.wt2.unwrap_or(0)),
+                        song_id.eq(song_id_val),
+                        length.eq(0), // unimplemeneted
+                        objects.eq(0), // unimplemented
+                        coins.eq(0), // unimplemented
+                        has_ldm.eq(input.ldm.unwrap_or(0)),
+                        two_player.eq(0) // unimplemented
+                    ))
+                    .get_result::<Level, >(connection)
+                    .expect("failed to update level");
+
+                fs::write(format!("{}/levels/{}.lvl", crate::CONFIG.db.data_folder, updated_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
 
                 return status::Custom(Status::Ok, Box::leak(input.levelID.to_string().into_boxed_str()))
             } else {
                 // upload level
                 let new_level = NewLevel {
-                    // TODO: clean and filter this to 20 charfacters
-                    name: input.levelName.clone(),
+                    name: helpers::clean::clean_basic(&input.levelName).chars().take(20).collect(),
                     user_id: user_id_val,
-                    // TODO: filter this to 140 characters
-                    description: description_val,
+                    description: description_val.chars().take(140).collect(),
                     original: input.original.unwrap_or(0),
                     game_version: input.gameVersion,
                     binary_version: input.binaryVersion.unwrap_or(0),
@@ -130,9 +152,9 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                 };
 
                 let inserted_level = diesel::insert_into(levels)
-                .values(&new_level)
-                .get_result::<Level, >(connection)
-                .expect("failed to insert level");
+                    .values(&new_level)
+                    .get_result::<Level, >(connection)
+                    .expect("failed to insert level");
                 
                 fs::write(format!("{}/levels/{}.lvl", crate::CONFIG.db.data_folder, inserted_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
 
