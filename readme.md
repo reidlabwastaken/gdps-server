@@ -38,4 +38,4 @@ _these features are implemented_
 - patch `upload_level` to use 2.2 unlisted (friends only stuff)
 - in our level parsing, check for dual portals rather than just starting dual
 - <small>green name users...</small>
-- maybe tone down the clone usage (this is for sure causing memory problems 😉)
+- add more logging
