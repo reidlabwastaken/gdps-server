@@ -46,40 +46,38 @@ impl ObjectData {
     object_prop_bool!("13", checked);
 }
 
-pub mod portal_speed {
-    pub enum PortalSpeed {
-        Slow,
-        Normal,
-        Medium,
-        Fast,
-        VeryFast
-    }
+pub enum PortalSpeed {
+    Slow,
+    Normal,
+    Medium,
+    Fast,
+    VeryFast
+}
 
-    impl PortalSpeed {
-        pub fn portal_speed(&self) -> f64 {
-            match self {
-                PortalSpeed::Slow => 251.16,
-                PortalSpeed::Normal => 311.58,
-                PortalSpeed::Medium => 387.42,
-                PortalSpeed::Fast => 478.0,
-                PortalSpeed::VeryFast => 576.0
-            }
+impl PortalSpeed {
+    pub fn portal_speed(&self) -> f64 {
+        match self {
+            PortalSpeed::Slow => 251.16,
+            PortalSpeed::Normal => 311.58,
+            PortalSpeed::Medium => 387.42,
+            PortalSpeed::Fast => 478.0,
+            PortalSpeed::VeryFast => 576.0
         }
     }
 }
 
-pub fn id_to_portal_speed(id: i32) -> Option<portal_speed::PortalSpeed> {
+pub fn id_to_portal_speed(id: i32) -> Option<PortalSpeed> {
     match id {
-        200 => Some(portal_speed::PortalSpeed::Slow),
-        201 => Some(portal_speed::PortalSpeed::Normal),
-        202 => Some(portal_speed::PortalSpeed::Medium),
-        203 => Some(portal_speed::PortalSpeed::Fast),
-        1334 => Some(portal_speed::PortalSpeed::VeryFast),
+        200 => Some(PortalSpeed::Slow),
+        201 => Some(PortalSpeed::Normal),
+        202 => Some(PortalSpeed::Medium),
+        203 => Some(PortalSpeed::Fast),
+        1334 => Some(PortalSpeed::VeryFast),
         _ => None,
     }
 }
 
-pub fn get_seconds_from_xpos(pos: f64, start_speed: portal_speed::PortalSpeed, portals: Vec<ObjectData>) -> f64 {
+pub fn get_seconds_from_xpos(pos: f64, start_speed: PortalSpeed, portals: Vec<ObjectData>) -> f64 {
     let mut speed;
     let mut last_obj_pos = 0.0;
     let mut last_segment = 0.0;
@@ -110,12 +108,12 @@ pub fn get_seconds_from_xpos(pos: f64, start_speed: portal_speed::PortalSpeed, p
 
 pub fn measure_length(objects: Vec<ObjectData>, ka4: i32) -> f64 {
     let start_speed = match ka4 {
-        0 => portal_speed::PortalSpeed::Normal,
-        1 => portal_speed::PortalSpeed::Slow,
-        2 => portal_speed::PortalSpeed::Medium,
-        3 => portal_speed::PortalSpeed::Fast,
-        4 => portal_speed::PortalSpeed::VeryFast,
-        _ => portal_speed::PortalSpeed::Normal
+        0 => PortalSpeed::Normal,
+        1 => PortalSpeed::Slow,
+        2 => PortalSpeed::Medium,
+        3 => PortalSpeed::Fast,
+        4 => PortalSpeed::VeryFast,
+        _ => PortalSpeed::Normal
     };
 
     let max_x_pos = objects

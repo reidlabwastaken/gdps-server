@@ -35,7 +35,8 @@ _these features are implemented_
 ## todo
 
 - swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!)
-- patch `upload_level` to use 2.2 unlisted (friends only stuff)
+- patch `upload_level` and `download_level` to use 2.2 unlisted after we get social shit (friends only stuff)
 - in our level parsing, check for dual portals rather than just starting dual
 - <small>green name users...</small>
-- add more logging
+- add more old endpoints
+- add events, weekly, daily
