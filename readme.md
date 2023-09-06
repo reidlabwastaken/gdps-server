@@ -35,6 +35,7 @@ _these features are implemented_
 ## todo
 
 - swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!)
-- patch `upload_level` to use 2.2 unlisted(honsetly idk what this is but it exists?)
-- add level parsing (`upload_level` can use the correct `length`, `objects`, `coins`, and `two_player`)
+- patch `upload_level` to use 2.2 unlisted (friends only stuff)
+- in our level parsing, check for dual portals rather than just starting dual
 - <small>green name users...</small>
+- maybe tone down the clone usage (this is for sure causing memory problems 😉)

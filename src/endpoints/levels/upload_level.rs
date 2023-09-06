@@ -73,7 +73,30 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
         None => { extra_string = helpers::levels::DEFAULT_EXTRA_STRING.to_owned() }
     }
 
-    // db shit
+    // level parsing
+    let level_raw_objects = helpers::levels::decode(input.levelString.clone());
+    let level_objects = helpers::levels::to_objectdata(level_raw_objects.clone());
+    let inner_level_string = level_raw_objects
+        .iter()
+        .find(|obj| !obj.contains_key("1") && obj.get("kA9") == Some(&"0".to_string()))
+        .expect("couldnt decode inner level string");
+
+    let level_length_secs = helpers::levels::measure_length(
+        level_objects.clone(), 
+        inner_level_string.get("kA4").unwrap_or(&String::from("0")).parse::<i32>().expect("kA4 not int")
+    );
+
+    let coins_val = level_objects.iter().filter(|obj| obj.id() == 1329).count(); // 1329 is coin id
+    let objects_val = level_objects.len();
+    let two_player_val = if inner_level_string.get("kA10").unwrap_or(&String::from("0")).parse::<i32>().expect("kA10 not int") == 1 { 1 } else { 0 };
+    let level_length_val = helpers::levels::secs_to_time(level_length_secs);
+
+    // blocking
+    if coins_val > 3 {
+        return status::Custom(Status::Ok, "1")
+    }
+
+    // data base 🤣😁
     use crate::models::{Level, NewLevel};
 
     {
@@ -110,11 +133,11 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                         editor_time.eq(input.wt.unwrap_or(0)),
                         editor_time_copies.eq(input.wt2.unwrap_or(0)),
                         song_id.eq(song_id_val),
-                        length.eq(0), // unimplemeneted
-                        objects.eq(0), // unimplemented
-                        coins.eq(0), // unimplemented
+                        length.eq(level_length_val),
+                        objects.eq(objects_val as i32),
+                        coins.eq(coins_val as i32),
                         has_ldm.eq(input.ldm.unwrap_or(0)),
-                        two_player.eq(0) // unimplemented
+                        two_player.eq(two_player_val)
                     ))
                     .get_result::<Level, >(connection)
                     .expect("failed to update level");
@@ -143,11 +166,12 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                     editor_time: input.wt.unwrap_or(0),
                     editor_time_copies: input.wt2.unwrap_or(0),
                     song_id: song_id_val,
-                    length: 0, // not implemeneted
-                    objects: 0, // not implemeneted
-                    coins: 0, // not implemeneted
+                    length: level_length_val,
+                    length_real: level_length_secs,
+                    objects: objects_val as i32,
+                    coins: coins_val as i32,
                     has_ldm: input.ldm.unwrap_or(0),
-                    two_player: 0 // not implemented
+                    two_player: two_player_val
                 };
 
                 let inserted_level = diesel::insert_into(levels)
