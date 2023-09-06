@@ -91,9 +91,14 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
     let two_player_val = if inner_level_string.get("kA10").unwrap_or(&String::from("0")).parse::<i32>().expect("kA10 not int") == 1 { 1 } else { 0 };
     let level_length_val = helpers::levels::secs_to_time(level_length_secs);
 
-    // blocking
+    // blocking coins
     if coins_val > 3 {
-        return status::Custom(Status::Ok, "1")
+        return status::Custom(Status::Ok, "-1")
+    }
+
+    // forbidden object checking
+    if let Some(_forbidden_object) = level_objects.iter().find(|obj| crate::CONFIG.levels.blocklist.contains(&obj.id())) {
+        return status::Custom(Status::Ok, "-1")
     }
 
     // data base 🤣😁

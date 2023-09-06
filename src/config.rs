@@ -6,7 +6,8 @@ use std::sync::LazyLock;
 pub struct Config {
     pub general: ConfigGeneral,
     pub accounts: ConfigAccounts,
-    pub db: ConfigDB
+    pub db: ConfigDB,
+    pub levels: ConfigLevels
 }
 
 #[derive(Deserialize)]
@@ -23,6 +24,11 @@ pub struct ConfigAccounts {
 #[derive(Deserialize)]
 pub struct ConfigDB {
     pub data_folder: String
+}
+
+#[derive(Deserialize)]
+pub struct ConfigLevels {
+    pub blocklist: Vec<i32>
 }
 
 impl Config {

@@ -24,12 +24,12 @@ CREATE TABLE levels (
 
     song_id  INTEGER  NOT NULL,
 
-    length      INTEGER  NOT NULL,
-    length_real DOUBLE PRECISION    NOT NULL,
-    objects     INTEGER  NOT NULL,
-    coins       INTEGER  NOT NULL  DEFAULT 0,
-    has_ldm     INTEGER  NOT NULL  DEFAULT 0,
-    two_player  INTEGER  NOT NULL  DEFAULT 0,
+    length      INTEGER           NOT NULL,
+    length_real DOUBLE PRECISION  NOT NULL,
+    objects     INTEGER           NOT NULL,
+    coins       INTEGER           NOT NULL  DEFAULT 0,
+    has_ldm     INTEGER           NOT NULL  DEFAULT 0,
+    two_player  INTEGER           NOT NULL  DEFAULT 0,
 
     downloads             INTEGER  NOT NULL  DEFAULT 0,
     likes                 INTEGER  NOT NULL  DEFAULT 0,

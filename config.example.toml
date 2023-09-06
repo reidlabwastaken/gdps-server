@@ -21,3 +21,7 @@ allow_registration = true
 [db]
 # path for your data to be stored
 data_folder = "data"
+
+[levels]
+# object ids to block
+blocklist = [ 31 ] # start position
