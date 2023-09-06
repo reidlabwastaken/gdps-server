@@ -46,7 +46,7 @@ diesel::table! {
         editor_time_copies -> Int4,
         song_id -> Int4,
         length -> Int4,
-        length_real -> Int4,
+        length_real -> Float8,
         objects -> Int4,
         coins -> Int4,
         has_ldm -> Int4,

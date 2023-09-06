@@ -25,7 +25,7 @@ CREATE TABLE levels (
     song_id  INTEGER  NOT NULL,
 
     length      INTEGER  NOT NULL,
-    length_real INTEGER  NOT NULL,
+    length_real DOUBLE PRECISION    NOT NULL,
     objects     INTEGER  NOT NULL,
     coins       INTEGER  NOT NULL  DEFAULT 0,
     has_ldm     INTEGER  NOT NULL  DEFAULT 0,
