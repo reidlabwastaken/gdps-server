@@ -164,7 +164,7 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                         Some(requested_stars_val) => requested_stars_val.clamp(0, 10),
                         None => 0
                     },
-                    unlisted: input.unlisted.unwrap_or(0),
+                    unlisted: input.unlisted.unwrap_or(0).clamp(0, 1),
                     version: input.levelVersion,
                     extra_data: extra_string.as_bytes().to_owned(),
                     level_info: input.levelInfo.clone().into_bytes(),
@@ -175,7 +175,7 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                     length_real: level_length_secs,
                     objects: objects_val as i32,
                     coins: coins_val as i32,
-                    has_ldm: input.ldm.unwrap_or(0),
+                    has_ldm: input.ldm.unwrap_or(0).clamp(0, 1),
                     two_player: two_player_val
                 };
 

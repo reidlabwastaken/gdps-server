@@ -35,6 +35,7 @@ fn rocket() -> _ {
         .mount(CONFIG.general.append_path.as_str(), routes![
             endpoints::accounts::login_account::login_account,
             endpoints::accounts::register_account::register_account,
+            endpoints::accounts::update_account_settings::update_account_settings,
 
             endpoints::users::get_users::get_users,
 

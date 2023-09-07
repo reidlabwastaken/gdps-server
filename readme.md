@@ -39,4 +39,4 @@ _these features are implemented_
 - in our level parsing, check for dual portals rather than just starting dual
 - <small>green name users...</small>
 - add more old endpoints
-- add events, weekly, daily
+- better support for older versions
