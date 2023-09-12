@@ -435,5 +435,3 @@ pub fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static str> {
 
     return status::Custom(Status::Ok, Box::leak(response.into_boxed_str()))
 }
-
-//1:93455181:2:Siinamota:5:1:6:158483568:8:10:9:40:10:2171:12:0:13:21:14:40:17::43:5:25::18:0:19:0:42:0:45:3318:3:QnkgSm9yZ2UwMDFZVCAgcGFyYSBlc2N1Y2hhciBsYSBDYW5jaW9uIE5lY2VzaXRhcyBSZW1wbGF6YXIgZXN0YSA6XSBwYXMgMDAwMDAw:15:1:30:0:31:0:37:1:38:0:39:5:46:1:47:2:35:633211#158483568:Jorge001yt:16248905#1~|~633211~|~2~|~Random Song 04~|~3~|~42023~|~4~|~Zhenmuron~|~5~|~0.31~|~6~|~~|~10~|~http%3A%2F%2Faudio.ngfiles.com%2F633000%2F633211_Random-Song-04.mp3~|~7~|~~|~8~|~1#9999:0:10#d19e918b852b706b20e7fbc31bbb07d92efda123
