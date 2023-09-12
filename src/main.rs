@@ -26,11 +26,6 @@ use template_endpoints::*;
 mod config;
 use config::*;
 
-#[get("/")]
-fn index() -> String {
-    return String::from("gdps-server | https://git.reidlab.online/reidlab/gdps-server");
-}
-
 #[get("/<file..>")]
 async fn files(file: PathBuf) -> Option<NamedFile> {
     NamedFile::open(Path::new("public/").join(file)).await.ok()
