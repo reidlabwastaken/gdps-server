@@ -5,6 +5,11 @@
 #[macro_use] extern crate rocket;
 
 use std::fs;
+use std::path::{Path, PathBuf};
+
+use rocket::fs::NamedFile;
+
+use rocket_dyn_templates::{ Template };
 
 mod db;
 use db::*;
@@ -15,6 +20,9 @@ use helpers::*;
 mod endpoints;
 use endpoints::*;
 
+mod template_endpoints;
+use template_endpoints::*;
+
 mod config;
 use config::*;
 
@@ -23,15 +31,28 @@ fn index() -> String {
     return String::from("gdps-server | https://git.reidlab.online/reidlab/gdps-server");
 }
 
+#[get("/<file..>")]
+async fn files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("public/").join(file)).await.ok()
+}
+
 #[launch]
 fn rocket() -> _ {
-    fs::create_dir_all(&CONFIG.db.data_folder).expect("failed to create data directory!");
+    // this is a bit scuffed
+    fs::create_dir_all(&CONFIG.db.data_folder).expect("failed to create data directory! (probably a permission err)");
     fs::create_dir_all(format!("{}/levels", &CONFIG.db.data_folder)).expect("failed to create data directory for levels");
+    
     rocket::build()
         .configure(rocket::Config::figment().merge(("port", CONFIG.general.port)))
+        // actual website
         .mount("/", routes![
-            index,
+            template_endpoints::index::index
         ])
+        // assets
+        .mount("/", routes![
+            files
+        ]) 
+        // GEOMETRY DASH https://www.youtube.com/watch?v=_pLrtsf5yfE
         .mount(CONFIG.general.append_path.as_str(), routes![
             endpoints::accounts::login_account::login_account,
             endpoints::accounts::register_account::register_account,
@@ -39,6 +60,9 @@ fn rocket() -> _ {
 
             endpoints::users::get_users::get_users,
 
+            endpoints::levels::get_levels::get_levels,
             endpoints::levels::upload_level::upload_level
         ])
+        // so templates work i think
+        .attach(Template::fairing())
 }

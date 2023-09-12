@@ -12,7 +12,7 @@ pub fn format(map: HashMap<i32, impl ToString>) -> String {
         }
     }
 
-    if !result.ends_with(":") {
+    if result.ends_with(":") {
         result.pop();
     }
 

@@ -130,7 +130,7 @@ pub struct NewLevel {
     pub name: String,
     pub user_id: i32,
     pub description: String,
-    pub original: i32,
+    pub original: Option<i32>,
     pub game_version: i32,
     pub binary_version: i32,
     pub password: Option<String>,

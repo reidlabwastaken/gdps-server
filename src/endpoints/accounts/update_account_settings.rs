@@ -31,7 +31,6 @@ pub fn update_account_settings(input: Form<FormUpdateAccountSettings>) -> status
     // account verification
     let (_user_id_val, account_id_val): (i32, i32);
 
-    // password argument is used for the level, so
     match helpers::accounts::auth(input.accountID.clone(), input.password.clone(), input.gjp.clone(), input.gjp2.clone()) {
         Ok((user_id, account_id)) => {
             _user_id_val = user_id;

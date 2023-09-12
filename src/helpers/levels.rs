@@ -5,6 +5,8 @@ use base64::{Engine as _, engine::general_purpose};
 
 use flate2::read::GzDecoder;
 
+use std::collections::HashMap;
+
 pub static DEFAULT_EXTRA_STRING: LazyLock<String> = LazyLock::new(|| {
     let string = String::from("29_29_29_40_29_29_29_29_29_29_29_29_29_29_29_29");
     
@@ -19,7 +21,6 @@ macro_rules! object_prop_bool {
     };
 }
 
-use std::collections::HashMap;
 
 #[derive(Clone)]
 pub struct ObjectData {
@@ -54,8 +55,8 @@ pub enum PortalSpeed {
     VeryFast
 }
 
-impl PortalSpeed {
-    pub fn portal_speed(&self) -> f64 {
+impl Into<f64> for PortalSpeed {
+    fn into(self) -> f64 {
         match self {
             PortalSpeed::Slow => 251.16,
             PortalSpeed::Normal => 311.58,
@@ -78,12 +79,12 @@ pub fn id_to_portal_speed(id: i32) -> Option<PortalSpeed> {
 }
 
 pub fn get_seconds_from_xpos(pos: f64, start_speed: PortalSpeed, portals: Vec<ObjectData>) -> f64 {
-    let mut speed;
+    let mut speed: f64;
     let mut last_obj_pos = 0.0;
     let mut last_segment = 0.0;
     let mut segments = 0.0;
 
-    speed = start_speed.portal_speed();
+    speed = start_speed.into();
 
     if portals.is_empty() {
         return pos / speed
@@ -97,7 +98,7 @@ pub fn get_seconds_from_xpos(pos: f64, start_speed: PortalSpeed, portals: Vec<Ob
             last_segment = s;
             segments += s;
 
-            speed = id_to_portal_speed(portal.id()).expect("not a portal").portal_speed();
+            speed = id_to_portal_speed(portal.id()).expect("not a portal").into();
 
             last_obj_pos = portal.x()
         }

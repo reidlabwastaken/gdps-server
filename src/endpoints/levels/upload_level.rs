@@ -141,7 +141,7 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                         length.eq(level_length_val),
                         objects.eq(objects_val as i32),
                         coins.eq(coins_val as i32),
-                        has_ldm.eq(input.ldm.unwrap_or(0)),
+                        has_ldm.eq(input.ldm.unwrap_or(0).clamp(0, 1)),
                         two_player.eq(two_player_val)
                     ))
                     .get_result::<Level, >(connection)
@@ -156,7 +156,7 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                     name: helpers::clean::clean_basic(&input.levelName).chars().take(20).collect(),
                     user_id: user_id_val,
                     description: description_val.chars().take(140).collect(),
-                    original: input.original.unwrap_or(0),
+                    original: input.original,
                     game_version: input.gameVersion,
                     binary_version: input.binaryVersion.unwrap_or(0),
                     password: input.password.clone(),

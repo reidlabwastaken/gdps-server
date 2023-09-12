@@ -38,31 +38,33 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
             .get_results::<User, >(connection)
             .expect("Fatal error loading users")
     } {
+        let user: User = result;
+
         let formatted_result = helpers::format::format(hashmap! {
-            1 => result.username,
-            2 => result.id.to_string(),
-            3 => result.stars.to_string(),
-            4 => result.demons.to_string(),
-            8 => result.creator_points.to_string(),
+            1 => user.username,
+            2 => user.id.to_string(),
+            3 => user.stars.to_string(),
+            4 => user.demons.to_string(),
+            8 => user.creator_points.to_string(),
             9 => {
                 vec![
-                    result.cube,
-                    result.ship,
-                    result.ball,
-                    result.ufo,
-                    result.wave,
-                    result.robot
-                ][result.icon_type as usize].to_string()
+                    user.cube,
+                    user.ship,
+                    user.ball,
+                    user.ufo,
+                    user.wave,
+                    user.robot
+                ][user.icon_type as usize].to_string()
             },
-            10 => result.color1.to_string(),
-            11 => result.color2.to_string(),
-            13 => result.coins.to_string(),
-            14 => result.icon_type.to_string(),
-            15 => result.special.to_string(),
+            10 => user.color1.to_string(),
+            11 => user.color2.to_string(),
+            13 => user.coins.to_string(),
+            14 => user.icon_type.to_string(),
+            15 => user.special.to_string(),
             16 => {
-                match result.account_id {
+                match user.account_id {
                     Some(account_id_value) => account_id_value.to_string(),
-                    None => match result.udid {
+                    None => match user.udid {
                         Some(udid_value) => udid_value.to_string(),
                         None => panic!("user has no account_id or udid?!?!?")
                     }
@@ -83,7 +85,7 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
     let amount = query_users_count
         .count()
         .get_result::<i64>(connection)
-        .expect("Error querying user count");
+        .expect("error querying user count");
 
     let response = if results.is_empty() {
         String::from("-1")

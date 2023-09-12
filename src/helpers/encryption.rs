@@ -28,3 +28,23 @@ pub fn decode_gjp(gjp: String) -> String {
     let xor_decoded = cyclic_xor_string(&base64_decoded, "37526");
     return xor_decoded
 }
+
+pub fn gen_multi(level_hash_data: Vec<(i32, i32, bool)>) -> String {
+    let mut input_str = String::new();
+
+    for (_index, val) in level_hash_data.iter().enumerate() {
+        let (level_id, stars, coins) = val;
+        let level_id_str = level_id.to_string();
+
+        input_str.push(level_id_str.chars().nth(0).unwrap());
+        input_str.push(level_id_str.chars().last().unwrap());
+        input_str.push_str(&stars.to_string());
+        input_str.push_str(if *coins { "1" } else { "0" });
+    }
+
+    let mut bytes: Vec<u8> = Vec::new();
+    bytes.extend(input_str.as_bytes().to_vec());
+    bytes.extend("xI25fpAapCQg".as_bytes().to_vec());
+
+    return Sha1::default().digest(bytes.as_mut_slice()).to_hex();
+}
