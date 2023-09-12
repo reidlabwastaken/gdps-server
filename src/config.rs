@@ -13,7 +13,8 @@ pub struct Config {
 #[derive(Deserialize)]
 pub struct ConfigGeneral {
     pub append_path: String,
-    pub port: u16
+    pub port: u16,
+    pub realip_header: String
 }
 
 #[derive(Deserialize)]

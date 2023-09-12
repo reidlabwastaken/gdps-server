@@ -43,3 +43,4 @@ _these features are implemented_
 - sqlite would make sense for this
 - unscuff difficulties
 - moderation utilities
+- probably make more things bools in the database

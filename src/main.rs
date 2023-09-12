@@ -39,11 +39,14 @@ async fn files(file: PathBuf) -> Option<NamedFile> {
 #[launch]
 fn rocket() -> _ {
     // this is a bit scuffed
-    fs::create_dir_all(&CONFIG.db.data_folder).expect("failed to create data directory! (probably a permission err)");
+    fs::create_dir_all(&CONFIG.db.data_folder).expect("failed to create data directory!");
     fs::create_dir_all(format!("{}/levels", &CONFIG.db.data_folder)).expect("failed to create data directory for levels");
     
     rocket::build()
-        .configure(rocket::Config::figment().merge(("port", CONFIG.general.port)))
+        // conf
+        .configure(rocket::Config::figment()
+            .merge(("port", CONFIG.general.port))
+            .merge(("ip_header", CONFIG.general.realip_header.as_str())))
         // actual website
         .mount("/", routes![
             template_endpoints::index::index
