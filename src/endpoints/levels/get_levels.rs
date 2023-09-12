@@ -417,7 +417,6 @@ pub fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static str> {
             { if let 1 = level.rated_coins {
                 true
             } else {
-                println!("{}", "no rated coin");
                 false
             }}
         ));
@@ -431,7 +430,6 @@ pub fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static str> {
     let search_meta = format!("{}:{}:{}", level_count, input.page * 10, 10);
 
     let response = vec![results.join("|"), users.join("|"), songs.join("|"), search_meta, helpers::encryption::gen_multi(hash_data)].join("#");
-    println!("{}", response);
 
     return status::Custom(Status::Ok, Box::leak(response.into_boxed_str()))
 }
