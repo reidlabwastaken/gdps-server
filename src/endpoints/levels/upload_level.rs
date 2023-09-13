@@ -8,6 +8,7 @@ use base64::{Engine as _, engine::general_purpose};
 
 use std::fs;
 
+use crate::config::CONFIG;
 use crate::helpers;
 use crate::db;
 
@@ -93,6 +94,11 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
 
     // blocking coins
     if coins_val > 3 {
+        return status::Custom(Status::Ok, "-1")
+    }
+
+    // too many objects
+    if objects_val > CONFIG.levels.max_objects as usize {
         return status::Custom(Status::Ok, "-1")
     }
 

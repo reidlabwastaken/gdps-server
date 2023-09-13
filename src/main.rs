@@ -8,8 +8,9 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use rocket::fs::NamedFile;
+use rocket::data::{Limits, ToByteUnit};
 
-use rocket_dyn_templates::{ Template };
+use rocket_dyn_templates::Template;
 
 mod db;
 use db::*;
@@ -41,7 +42,8 @@ fn rocket() -> _ {
         // conf
         .configure(rocket::Config::figment()
             .merge(("port", CONFIG.general.port))
-            .merge(("ip_header", CONFIG.general.realip_header.as_str())))
+            .merge(("ip_header", CONFIG.general.realip_header.as_str()))
+            .merge(("limits", Limits::new().limit("forms", 10.megabytes()))))
         // actual website
         .mount("/", routes![
             template_endpoints::index::index

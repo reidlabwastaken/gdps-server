@@ -225,10 +225,18 @@ pub fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static str> {
 
                         if user_id_val == input.str.parse::<i32>().expect("couldnt convert query input to i32") {
                             can_see_unlisted = true;
+                            query = query.filter(levels::user_id.eq(user_id_val));
+                            count_query = count_query.filter(levels::user_id.eq(user_id_val))
                         } else {
                             return status::Custom(Status::Ok, "-1")
                         }
                     }
+                }
+                if let None = input.local {
+                    let user_id_val = input.str.parse::<i32>().expect("couldnt convert query input to i32");
+
+                    query = query.filter(levels::user_id.eq(user_id_val));
+                    count_query = count_query.filter(levels::user_id.eq(user_id_val))
                 }
             }
             // featured

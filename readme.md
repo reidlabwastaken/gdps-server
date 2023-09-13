@@ -34,16 +34,14 @@ _these features are implemented_
 
 ## todo
 
-- swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!) this would also make the `28` and `29` parameters work on downloadlevel
+- swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!) this would also make the `28` (upload) and `29` (update) responses work on downloadlevel and the `4` (recent) on getlevels 
 - 2.2 friends only unlisted
 - add more old endpoints + better support for older versions
 - add dailies, events, weekly
-- add defaults to more parameters
 - better way for checking if song is custom (currently `id > 50`)
 - sqlite would make sense for this
 - unscuff difficulties
 - moderation utilities
 - probably make more things bools in the database
 - ip actions
-- fix downlopading levels
 - better song support

@@ -29,6 +29,7 @@ pub struct ConfigDB {
 
 #[derive(Deserialize)]
 pub struct ConfigLevels {
+    pub max_objects: i32,
     pub blocklist: Vec<i32>
 }
 
