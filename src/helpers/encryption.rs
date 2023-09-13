@@ -46,5 +46,35 @@ pub fn gen_multi(level_hash_data: Vec<(i32, i32, bool)>) -> String {
     bytes.extend(input_str.as_bytes().to_vec());
     bytes.extend("xI25fpAapCQg".as_bytes().to_vec());
 
-    return Sha1::default().digest(bytes.as_mut_slice()).to_hex();
+    return Sha1::default().digest(bytes.as_slice()).to_hex();
+}
+
+pub fn gen_solo(level_string: String) -> String {
+    let mut hash = String::new();
+    let divided = level_string.len() as i32 / 40;
+    let mut i = 0;
+    let mut k = 0;
+    while k < level_string.len() {
+        if i > 39 {
+            break
+        }
+
+        hash += level_string.chars().nth(k).expect("invalid char access").to_string().as_str();
+        i += 1;
+        k += divided as usize;
+    }
+    
+    let mut bytes: Vec<u8> = Vec::new();
+    bytes.extend(format!("{:a<5}", hash).as_bytes().to_vec());
+    bytes.extend("xI25fpAapCQg".as_bytes().to_vec());
+
+    return Sha1::default().digest(bytes.as_slice()).to_hex();
+}
+
+pub fn gen_solo_2(level_mutli_string: String) -> String {
+    let mut bytes: Vec<u8> = Vec::new();
+    bytes.extend(level_mutli_string.as_bytes().to_vec());
+    bytes.extend("xI25fpAapCQg".as_bytes().to_vec());
+
+    return Sha1::default().digest(bytes.as_slice()).to_hex();
 }

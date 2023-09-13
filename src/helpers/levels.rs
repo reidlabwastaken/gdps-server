@@ -21,7 +21,6 @@ macro_rules! object_prop_bool {
     };
 }
 
-
 #[derive(Clone)]
 pub struct ObjectData {
     raw: HashMap<String, String>

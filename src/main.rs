@@ -58,6 +58,7 @@ fn rocket() -> _ {
 
             endpoints::users::get_users::get_users,
 
+            endpoints::levels::download_level::download_level,
             endpoints::levels::get_levels::get_levels,
             endpoints::levels::upload_level::upload_level
         ])
