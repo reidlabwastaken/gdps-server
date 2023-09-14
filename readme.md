@@ -34,6 +34,7 @@ _these features are implemented_
 
 ## todo
 
+- __we're doing song uploading/rework and level reuploading next__ 
 - swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!) this would also make the `28` (upload) and `29` (update) responses work on downloadlevel and the `4` (recent) on getlevels 
 - 2.2 friends only unlisted
 - add more old endpoints + better support for older versions
