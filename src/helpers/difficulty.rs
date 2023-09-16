@@ -77,7 +77,6 @@ impl DemonDifficulty {
             2 => DemonDifficulty::Hard,
             3 => DemonDifficulty::Insane,
             4 => DemonDifficulty::Extreme,
-            5 => DemonDifficulty::Insane,
             _ => panic!("invalid demon difficulty")
         }
     }
