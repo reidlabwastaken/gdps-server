@@ -107,6 +107,11 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
         return status::Custom(Status::Ok, "-1")
     }
 
+    // ACE vulnerability check
+    if let Some(_ace_object) = level_objects.iter().find(|obj| obj.item_block_id() < Some(0) || obj.item_block_id() > Some(1100)) {
+        return status::Custom(Status::Ok, "-1")
+    }
+
     // data base 🤣😁
     use crate::models::{Level, NewLevel};
 

@@ -21,6 +21,14 @@ macro_rules! object_prop_bool {
     };
 }
 
+macro_rules! object_prop_int {
+    ($key:expr, $name:ident) => {
+        pub fn $name(&self) -> Option<i32> {
+            self.raw.get($key).and_then(|s| s.parse().ok())
+        }
+    };
+}
+
 #[derive(Clone)]
 pub struct ObjectData {
     raw: HashMap<String, String>
@@ -44,6 +52,7 @@ impl ObjectData {
     }
 
     object_prop_bool!("13", checked);
+    object_prop_int!("80", item_block_id);
 }
 
 pub enum PortalSpeed {

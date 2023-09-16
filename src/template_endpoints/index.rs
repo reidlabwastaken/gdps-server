@@ -6,7 +6,18 @@ use rand::Rng;
 pub fn index() -> Template {
     let silly_strings: Vec<&str> = vec![
         "the trianges consume",
-        "geomtry das"
+        "geomtry das",
+        "now with no RCE!",
+        "the best gdps",
+        "better than topala",
+        "better than robtop",
+        "slaughterhouse",
+        "deepwoken verse 3",
+        "skibidi toilet",
+        "kagepro",
+        "wowaka is peak music",
+        "you have been warned: dyno jun",
+        "listen to jin"
     ];
 
     let mut rng = rand::thread_rng();

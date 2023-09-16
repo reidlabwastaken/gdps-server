@@ -40,9 +40,7 @@ _these features are implemented_
 - add more old endpoints + better support for older versions
 - add dailies, events, weekly
 - better way for checking if song is custom (currently `id > 50`)
-- sqlite would make sense for this
-- unscuff difficulties
 - moderation utilities
-- probably make more things bools in the database
 - ip actions
 - better song support
+- return "-1" instead of panicking for stuff
