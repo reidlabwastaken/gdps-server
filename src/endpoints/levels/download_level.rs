@@ -6,7 +6,7 @@ use diesel::prelude::*;
 
 use base64::{Engine as _, engine::general_purpose};
 
-use flate2::read::GzDecoder;
+use flate2::read::{GzDecoder, ZlibDecoder};
 
 use std::fs;
 
@@ -100,10 +100,21 @@ pub fn download_level(input: Form<FormDownloadLevel>) -> status::Custom<&'static
 
         let compressed_level_data = fs::read(format!("{}/{}/{}.lvl", crate::CONFIG.db.data_folder, "levels", level.id)).expect("couldnt read level file");
 
-        let mut level_data_decoder = GzDecoder::new(compressed_level_data.as_slice());
-        
-        let mut uncompressed_level_data = String::new();
-        level_data_decoder.read_to_string(&mut uncompressed_level_data).expect("err unzipping level");
+        let uncompressed_level_data = String::from_utf8(if compressed_level_data.starts_with(&[0x1F, 0x8B]) {
+            // gzip!!
+            let mut gz_decoder = GzDecoder::new(compressed_level_data.as_slice());
+            let mut decompressed_data = Vec::new();
+            gz_decoder.read_to_end(&mut decompressed_data).expect("err uncompressing level");
+            decompressed_data
+        } else if compressed_level_data.starts_with(&[0x78]) {
+            // zlib!!
+            let mut zlib_decoder = ZlibDecoder::new(compressed_level_data.as_slice());
+            let mut decompressed_data = Vec::new();
+            zlib_decoder.read_to_end(&mut decompressed_data).expect("err uncompressing level");
+            decompressed_data
+        } else {
+            panic!("invalid compression method")
+        }).expect("invalid utf-8 sequence");
         
         let level_data = uncompressed_level_data.as_bytes();
 
@@ -201,6 +212,5 @@ pub fn download_level(input: Form<FormDownloadLevel>) -> status::Custom<&'static
         response.push(helpers::encryption::gen_solo_2(thing.join(",")));
     }
 
-    println!("{:?}", response);
     return status::Custom(Status::Ok, Box::leak(response.join("#").into_boxed_str()))
 }
