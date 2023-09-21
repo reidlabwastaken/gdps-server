@@ -41,7 +41,6 @@ pub async fn post_reupload(input: Form<FormReupload>) -> Template {
 
     let disabled = !crate::CONFIG.levels.reupload;
 
-    let error: Option<String> = None;
     if !disabled {
         let remote_level_id = input.level_id;
         

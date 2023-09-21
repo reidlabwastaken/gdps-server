@@ -10,12 +10,9 @@ i've run out of ideas.
 
 ### features
 
-_these features are not yet implemented_
-- utilizes `yt-dlp` and `ffmpeg` to let you upload custom songs from sources such as [YouTube](https://youtube.com), [SoundCloud](https://soundcloud.com), and [1800+ other sources](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
-- admin control panels
-
-_these features are implemented_
-- none muhuhhahaha
+- [highly configurable](https://git.reidlab.online/reidlab/gdps-server/src/branch/main/config.example.toml)
+- compiled, for extra speed
+- [parses uploaded levels](https://git.reidlab.online/reidlab/gdps-server/src/branch/main/src/helpers/levels.rs) to patch RCEs and verify that everything is in place
 
 ## build
 
