@@ -74,8 +74,6 @@ pub async fn post_reupload(input: Form<FormReupload>) -> Template {
         use crate::schema::levels::dsl::*;
         use crate::models::{Level, NewLevel};
 
-        println!("{:?}", level_data.get("k3"));
-
         let new_level = NewLevel {
             name: level_data.get("k2").expect("level name not found").to_string(),
             user_id: crate::helpers::reupload::REUPLOAD_ACCOUNT_ID.read().expect("poisoned lock!!").to_string().parse::<i32>().expect("reupload account id not int (shouldnt ever happen)"),
