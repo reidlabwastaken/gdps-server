@@ -29,3 +29,5 @@ data_folder = "data"
 max_objects = 80_000
 # object ids to block
 blocklist = [ 31 ] # start position
+# if reuploading levels is allowed
+reupload = true

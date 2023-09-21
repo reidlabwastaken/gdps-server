@@ -45,7 +45,6 @@ pub fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
 
     use crate::schema::{levels, users};
-
     use crate::models::{Level, User};
 
     let mut can_see_unlisted = false;

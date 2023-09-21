@@ -1,5 +1,7 @@
 use serde::Deserialize;
+
 use std::fs;
+
 use std::sync::LazyLock;
 
 #[derive(Deserialize)]
@@ -30,7 +32,8 @@ pub struct ConfigDB {
 #[derive(Deserialize)]
 pub struct ConfigLevels {
     pub max_objects: i32,
-    pub blocklist: Vec<i32>
+    pub blocklist: Vec<i32>,
+    pub reupload: bool
 }
 
 impl Config {

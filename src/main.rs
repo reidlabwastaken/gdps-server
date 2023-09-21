@@ -34,6 +34,10 @@ async fn files(file: PathBuf) -> Option<NamedFile> {
 
 #[launch]
 fn rocket() -> _ {
+    // init stuff
+    crate::helpers::reupload::init();
+
+    // data directories
     // this is a bit scuffed
     fs::create_dir_all(&CONFIG.db.data_folder).expect("failed to create data directory!");
     fs::create_dir_all(format!("{}/levels", &CONFIG.db.data_folder)).expect("failed to create data directory for levels");
@@ -46,13 +50,16 @@ fn rocket() -> _ {
             .merge(("limits", Limits::new().limit("forms", 10.megabytes()))))
         // actual website
         .mount("/", routes![
-            template_endpoints::index::index
+            template_endpoints::index::index,
+
+            template_endpoints::reupload::post_reupload,
+            template_endpoints::reupload::get_reupload
         ])
         // assets
         .mount("/", routes![
             files
         ]) 
-        // GEOMETRY DASH https://www.youtube.com/watch?v=_pLrtsf5yfE
+        // https://www.youtube.com/watch?v=_pLrtsf5yfE
         .mount(CONFIG.general.append_path.as_str(), routes![
             endpoints::accounts::login_account::login_account,
             endpoints::accounts::register_account::register_account,

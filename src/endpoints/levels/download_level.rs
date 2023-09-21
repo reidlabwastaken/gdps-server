@@ -93,7 +93,7 @@ pub fn download_level(input: Form<FormDownloadLevel>) -> status::Custom<&'static
 
         let xor_pass: String;
         if input.gameVersion.unwrap_or(19) >= 20 {
-            xor_pass = helpers::encryption::cyclic_xor_string(&level.password.clone().unwrap_or(String::from("0")), "26364")
+            xor_pass = general_purpose::URL_SAFE.encode(helpers::encryption::cyclic_xor_string(&level.password.clone().unwrap_or(String::from("0")), "26364"))
         } else {
             xor_pass = level.password.clone().unwrap_or(String::from("0"));
         }

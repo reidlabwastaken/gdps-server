@@ -34,7 +34,6 @@ _these features are implemented_
 
 ## todo
 
-- __we're doing song uploading/rework and level reuploading next__ 
 - swap to chrono instead of `(TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))` (thats REALLY ugly!!) this would also make the `28` (upload) and `29` (update) responses work on downloadlevel and the `4` (recent) on getlevels 
 - 2.2 friends only unlisted
 - add more old endpoints + better support for older versions
@@ -44,3 +43,8 @@ _these features are implemented_
 - ip actions
 - better song support
 - return "-1" instead of panicking for stuff
+- authentication caching (ip? redis?)
+- idfk where to put this but i need to rant about this. why cant you have `get` and `post` in the same function for rocket. like??? why??
+- use log instead of println
+- find what the fuck level info is. gddocs just says "a random gzip string" like bro what
+- unscuff parsing

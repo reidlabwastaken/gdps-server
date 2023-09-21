@@ -183,7 +183,6 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                     editor_time_copies: input.wt2.unwrap_or(0),
                     song_id: song_id_val,
                     length: level_length_val,
-                    length_real: level_length_secs,
                     objects: objects_val as i32,
                     coins: coins_val as i32,
                     has_ldm: input.ldm.unwrap_or(0).clamp(0, 1),

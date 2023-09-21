@@ -5,10 +5,18 @@ use base64::{Engine as _, engine::general_purpose};
 
 use flate2::read::GzDecoder;
 
+use roxmltree::Document;
+
 use std::collections::HashMap;
 
 pub static DEFAULT_EXTRA_STRING: LazyLock<String> = LazyLock::new(|| {
     let string = String::from("29_29_29_40_29_29_29_29_29_29_29_29_29_29_29_29");
+    
+    return string;
+});
+
+pub static DEFAULT_LEVEL_INFO: LazyLock<String> = LazyLock::new(|| {
+    let string = String::from("");
     
     return string;
 });
@@ -165,6 +173,21 @@ pub fn parse(raw_level_data: &str) -> Vec<HashMap<String, String>> {
             array_to_hash(values)
         })
         .collect()
+}
+
+pub fn gmd_parse(gmd_file: &str) -> HashMap<String, String> {
+    let doc = Document::parse(gmd_file).expect("failed to parse gmd file");
+    let root = doc.root_element();
+
+    let mut result = Vec::new();
+
+    for child in root.children().filter(|node| node.node_type() != roxmltree::NodeType::Text) {
+        if let Some(child_text) = child.children().next() {
+            result.push(child_text.text().unwrap_or("").to_string());
+        }
+    }
+
+    return array_to_hash(result);
 }
 
 pub fn decode(level_data: String) -> Vec<HashMap<String, String>> {
