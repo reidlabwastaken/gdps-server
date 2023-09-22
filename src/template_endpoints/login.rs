@@ -6,6 +6,8 @@ use rocket::form::Form;
 
 use rocket::http::{Cookie, CookieJar};
 
+use rocket::time::Duration;
+
 use diesel::prelude::*;
 
 use crate::db;
@@ -35,6 +37,11 @@ pub fn post_login(jar: &CookieJar<'_>, input: Form<FormLogin>) -> Template {
                     jar.add_private(Cookie::build(
                         "blackmail_data", 
                         format!("{}:{}:{}", account_id_username_val.1, account_id_user_id_val.0, account_id_user_id_val.1))
+                    .path("/")
+                    // should probably make this true when we get into production
+                    .secure(false)
+                    .http_only(true)
+                    .max_age(Duration::days(365))
                     .finish());
 
                     return Template::render("login", context! {
