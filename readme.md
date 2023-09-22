@@ -39,3 +39,4 @@ i've run out of ideas.
 - better song support
 - authentication caching (ip? redis?)
 - use log instead of println
+- make a proper rank system (reuploading, uploading music, rating, etc.)
