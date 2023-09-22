@@ -45,7 +45,7 @@ pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static s
         let query_result = accounts
             .select(id)
             .filter(username.eq(input.userName.clone()))
-            .get_result::<i32>(connection);
+            .get_result::<i32, >(connection);
 
         match query_result {
             Ok(account_id_val) => {

@@ -5,3 +5,4 @@ pub mod encryption;
 pub mod format;
 pub mod levels;
 pub mod reupload;
+pub mod templates;

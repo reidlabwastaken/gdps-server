@@ -45,3 +45,26 @@ pre {
 a {
     color: #89b4fa;
 }
+
+.error {
+    color: #f38ba8;
+}
+
+.success {
+    color: #a6e3a1;
+}
+
+.fancy-button {
+    outline: 0;
+    border: none;
+    background-color: #89b4fa;
+    color: #11111b;
+    font-size: 1.2rem;
+    padding: 0.4em 0.8em;
+    margin: 0.5em;
+    border-radius: 16px;
+
+    cursor: pointer;
+
+    transition: 0.1s background-color;
+}

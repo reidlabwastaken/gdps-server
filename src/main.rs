@@ -53,7 +53,12 @@ fn rocket() -> _ {
             template_endpoints::index::index,
 
             template_endpoints::reupload::post_reupload,
-            template_endpoints::reupload::get_reupload
+            template_endpoints::reupload::get_reupload,
+
+            template_endpoints::login::post_login,
+            template_endpoints::login::get_login,
+
+            template_endpoints::logout::logout,
         ])
         // assets
         .mount("/", routes![

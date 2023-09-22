@@ -39,3 +39,4 @@ i've run out of ideas.
 - better song support
 - authentication caching (ip? redis?)
 - use log instead of println
+- store everything in 1 cookie?
