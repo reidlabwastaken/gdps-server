@@ -7,7 +7,7 @@ pub fn index() -> Template {
     let silly_strings: Vec<&str> = vec![
         "the trianges consume",
         "geomtry das",
-        "now with no RCE!",
+        "now with no ACE!",
         "the best gdps",
         "better than topala",
         "better than robtop",
@@ -17,7 +17,21 @@ pub fn index() -> Template {
         "kagepro",
         "wowaka is peak music",
         "you have been warned: dyno jun",
-        "listen to jin"
+        "listen to jin",
+        "GIVEUP!GIVEUP!GIVEUP!GIVEUP!GIVEUP!GIVEUP!LOVE!LOVE!GIVEUP!GIVEUP!GIVEUP!GIVEUP!GIVEUP!GIVEUP!",
+        "cross site scripting is a myth",
+        "VITAL STATE: Deceased - abducted by Pikmin",
+        "geometry dash for the 3ds",
+        "trans rights",
+        "how many maggots eat burger?",
+        "who would win: the rust borrow checker or rotting flesh",
+        "your system has run out of application memory",
+        "unsafe { std::ptr::null_mut::<i32>().write(42) }",
+        "-1",
+        "[REDACTED]",
+        "chrome jop jop?",
+        "pikmin 4",
+        "italian apk downloader"
     ];
 
     let mut rng = rand::thread_rng();

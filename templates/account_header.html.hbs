@@ -1,0 +1,23 @@
+<div class="header">
+    <div class="greeting">
+        <img src="/assets/icons/gd/star.png" title="{{ username }}" class="greeting-l" height="100%" width="auto">
+        <div class="greeting-r">
+            <div class="greeting-top">
+                <div class="greeting-top-left">
+                    hai, <b>{{ username }}</b>!
+                </div>
+                <div class="greeting-stats">
+                    {{ stars }} <img src="/assets/icons/gd/star.png"> {{ diamonds }} <img src="/assets/icons/gd/diamond.png"> {{ coins }} <img src="/assets/icons/gd/coin.png"> {{ user_coins }} <img src="/assets/icons/gd/silvercoin.png"> {{ demons }} <img src="/assets/icons/gd/demon.png">
+                </div>
+            </div>
+            <div class="greeting-bottom">
+                <a href="/accounts/settings">Settings</a> &middot;
+                <form action="/accounts/logout" method="post" class="inline-post">
+                    <button type="submit" class="inline-post-button">
+                        Log out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

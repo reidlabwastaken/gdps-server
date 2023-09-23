@@ -54,6 +54,10 @@ a {
     color: #a6e3a1;
 }
 
+.dim {
+    color: #a6adc8;
+}
+
 .fancy-button {
     outline: 0;
     border: none;
@@ -67,4 +71,106 @@ a {
     cursor: pointer;
 
     transition: 0.1s background-color;
+}
+
+.fancy-button:hover {
+    background-color: #bad4fc;
+}
+
+.inline-post {
+    display: inline;
+}
+
+.inline-post-button {
+    display: inline;
+    background: none;
+    outline: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.greeting ::selection {
+    background-color: #11111b;
+    color: #cdd6f4;
+}
+
+.greeting {
+    background-color: #89b4fa;
+    color: #11111b;
+    border-radius: 1.5em;
+    padding: 1em;
+
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.greeting-l {
+    flex: 0 0 auto;
+    max-width: 100%;
+    width: auto;
+    height: 100%;
+    max-height: 3rem;
+    object-fit: contain;
+    display: block;
+}
+
+.greeting-r {
+    flex: 1 1 0px;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.greeting-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.greeting-top-left {
+    font-size: 1.4rem;
+}
+
+.greeting-stats {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.5ex;
+}
+
+.greeting-stats img {
+    width: auto;
+    height: 1em;
+}
+
+.greeting a {
+    color: #11111b;
+}
+
+
+.header {
+    height: 96px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.header>.greeting {
+    flex: 1 1 0px;
+}
+
+.favicon {
+    margin: auto;
+    display: block;
 }

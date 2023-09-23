@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Home</title>
+</head>
+
+<body style="display: flex; align-items: center; gap: 1.5em; flex-direction: column">
+    <h1 style="display: flex; align-items: center; gap: 1em">
+        <a href="/"><img src="/favicon.png" width="64" height="auto"></a>
+        Account Management
+    </h1>
+    <div class="header">
+        <div class="greeting">
+            <img src="/assets/icons/gd/demon.png" title="{{ username }}" class="greeting-l">
+            <div class="greeting-r">
+                <div class="greeting-top">
+                    <div class="greeting-top-left">
+                        hai, <b>{{ username }}</b>!
+                    </div>
+                    <div class="greeting-stats">
+                        {{ stars }} <img src="/assets/icons/gd/star.png"> {{ diamonds }} <img src="/assets/icons/gd/diamond.png"> {{ coins }} <img src="/assets/icons/gd/coin.png"> {{ user_coins }} <img src="/assets/icons/gd/silvercoin.png"> {{ demons }} <img src="/assets/icons/gd/demon.png">
+                    </div>
+                </div>
+                <div class="greeting-bottom">
+                    <a href="/accounts/settings">Settings</a> &middot;
+                    <form action="/accounts/logout" method="post" class="inline-post">
+                        <button type="submit" class="inline-post-button">
+                            Log out
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        lorem ipsum sur dolor amet or something. i'll put stuff here later LOL
+        <br><br>
+        anyway how has ur day been
+        <br><br>
+        the demon should be your user icon haha, ill get 2 that latr :3 (gonna be next update i think)
+    </div>
+</body>
+
+</html>

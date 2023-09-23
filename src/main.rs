@@ -58,7 +58,9 @@ fn rocket() -> _ {
             template_endpoints::login::post_login,
             template_endpoints::login::get_login,
 
-            template_endpoints::logout::logout,
+            template_endpoints::account_management::account_management,
+            
+            template_endpoints::logout::logout
         ])
         // assets
         .mount("/", routes![

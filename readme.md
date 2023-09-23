@@ -40,3 +40,5 @@ i've run out of ideas.
 - authentication caching (ip? redis?)
 - use log instead of println
 - make a proper rank system (reuploading, uploading music, rating, etc.)
+- user icons in the account management + settings (gdicon.oat.zone? selfhost?)
+- account settings page
