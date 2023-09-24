@@ -31,7 +31,8 @@ pub fn index() -> Template {
         "[REDACTED]",
         "chrome jop jop?",
         "pikmin 4",
-        "italian apk downloader"
+        "italian apk downloader",
+        "Invalid password, can still smell him off the dashboard"
     ];
 
     let mut rng = rand::thread_rng();
