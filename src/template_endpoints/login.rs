@@ -65,11 +65,14 @@ pub fn post_login(cookies: &CookieJar<'_>, input: Form<FormLogin>) -> Template {
 
 #[get("/login")]
 pub fn get_login(cookies: &CookieJar<'_>) -> Result<Redirect, Template> {
-    let (logged_in, _username, _account_id, _user_id) = crate::helpers::templates::auth!(cookies);
+    let logged_in = crate::helpers::templates::authenticate(cookies);
 
-    if logged_in {
-        Ok(Redirect::to("/"))
-    } else {
-        Err(Template::render("login", context! { }))
+    match logged_in {
+        Ok(_) => {
+            return Ok(Redirect::to("/"))
+        },
+        Err(_) => {
+            Err(Template::render("login", context! { }))
+        }
     }
 }

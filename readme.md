@@ -42,3 +42,4 @@ i've run out of ideas.
 - make a proper rank system (reuploading, uploading music, rating, etc.)
 - user icons in the account management + settings (gdicon.oat.zone? selfhost?)
 - account settings page
+- better web design

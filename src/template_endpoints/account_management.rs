@@ -12,26 +12,29 @@ use crate::db;
 pub fn account_management(cookies: &CookieJar<'_>) -> Result<Template, Redirect> {
     let connection = &mut db::establish_connection_pg();
 
-    let (logged_in, username_val, _account_id_val, user_id_val) = crate::helpers::templates::auth!(cookies);
+    let logged_in = crate::helpers::templates::authenticate(cookies);
 
-    if logged_in {
-        use crate::schema::users::dsl::*;
-        use crate::models::User;
-
-        let result = users
-            .filter(id.eq(user_id_val.expect("user_id not found")))
-            .get_result::<User, >(connection)
-            .expect("couldnt find user with user id from account");
-
-        return Ok(Template::render("account_management", context! {
-            username: username_val.expect("username not found"),
-            stars: result.stars,
-            diamonds: result.diamonds,
-            coins: result.coins,
-            user_coins: result.user_coins,
-            demons: result.demons
-        }));
-    } else {
-        return Err(Redirect::to("/login"));
+    match logged_in {
+        Ok((username_val, account_id_val, user_id_val)) => {
+            use crate::schema::users::dsl::*;
+            use crate::models::User;
+    
+            let result = users
+                .filter(id.eq(user_id_val))
+                .get_result::<User, >(connection)
+                .expect("couldnt find user with user id from account");
+    
+            return Ok(Template::render("account_management", context! {
+                username: username_val,
+                stars: result.stars,
+                diamonds: result.diamonds,
+                coins: result.coins,
+                user_coins: result.user_coins,
+                demons: result.demons
+            }));
+        },
+        Err(_) => {
+            return Err(Redirect::to("/login"));
+        }
     }
 }
