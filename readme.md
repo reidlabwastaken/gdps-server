@@ -42,4 +42,4 @@ i've run out of ideas.
 - authentication caching
 - use log instead of println
 - make a proper rank system (reuploading, uploading music, rating, etc.)
-- user icons in the account management + settings (gdicon.oat.zone? selfhost?)
+- user icons in the account management + settings (gdicon.oat.zone? selfhost?) ideally we find a legal way to do this (i cant distribute the plist+asset files directly) but doing this illegally is always an option

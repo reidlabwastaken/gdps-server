@@ -15,7 +15,7 @@ pub fn account_management(cookies: &CookieJar<'_>) -> Result<Template, Redirect>
     let logged_in = crate::helpers::templates::authenticate(cookies);
 
     match logged_in {
-        Ok((username_val, account_id_val, user_id_val)) => {
+        Ok((username_val, _account_id_val, user_id_val)) => {
             use crate::schema::users::dsl::*;
             use crate::models::User;
     
@@ -30,7 +30,8 @@ pub fn account_management(cookies: &CookieJar<'_>) -> Result<Template, Redirect>
                 diamonds: result.diamonds,
                 coins: result.coins,
                 user_coins: result.user_coins,
-                demons: result.demons
+                demons: result.demons,
+                creator_points: result.creator_points,
             }));
         },
         Err(_) => {

@@ -23,7 +23,12 @@
                         hai, <b>{{ username }}</b>!
                     </div>
                     <div class="greeting-stats">
-                        {{ stars }} <img src="/assets/icons/gd/star.png"> {{ diamonds }} <img src="/assets/icons/gd/diamond.png"> {{ coins }} <img src="/assets/icons/gd/coin.png"> {{ user_coins }} <img src="/assets/icons/gd/silvercoin.png"> {{ demons }} <img src="/assets/icons/gd/demon.png">
+                        {{ stars }} <img src="/assets/icons/gd/star.png"> 
+                        {{ diamonds }} <img src="/assets/icons/gd/diamond.png"> 
+                        {{ coins }} <img src="/assets/icons/gd/coin.png"> 
+                        {{ user_coins }} <img src="/assets/icons/gd/silver_coin.png"> 
+                        {{ demons }} <img src="/assets/icons/gd/demon.png">
+                        {{#unless (eq creator_points 0)}} {{ creator_points }} <img src="/assets/icons/gd/creator_points.png"> {{/unless}}
                     </div>
                 </div>
                 <div class="greeting-bottom">
