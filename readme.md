@@ -34,6 +34,7 @@ i've run out of ideas.
 
 - account settings page
 - better web design
+- user icons in the account management + settings (gdicon.oat.zone? selfhost?) ideally we find a legal way to do this (i cant distribute the plist+asset files directly) but doing this illegally is always an option
 - use chrono
 - 2.2 friends only unlisted
 - add dailies, events, weekly
@@ -42,4 +43,3 @@ i've run out of ideas.
 - authentication caching
 - use log instead of println
 - make a proper rank system (reuploading, uploading music, rating, etc.)
-- user icons in the account management + settings (gdicon.oat.zone? selfhost?) ideally we find a legal way to do this (i cant distribute the plist+asset files directly) but doing this illegally is always an option
