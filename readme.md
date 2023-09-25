@@ -13,6 +13,7 @@ i've run out of ideas.
 - [highly configurable](https://git.reidlab.online/reidlab/gdps-server/src/branch/main/config.example.toml)
 - compiled, for extra speed
 - [parses uploaded levels](https://git.reidlab.online/reidlab/gdps-server/src/branch/main/src/helpers/levels.rs) to patch RCEs and verify that everything is in place
+- website frontend
 
 ## build
 
@@ -31,15 +32,14 @@ i've run out of ideas.
 
 ## todo
 
-- chrono
+- account settings page
+- better web design
+- use chrono
 - 2.2 friends only unlisted
 - add dailies, events, weekly
 - moderation utilities
-- ip actions
 - better song support
-- authentication caching (ip? redis?)
+- authentication caching
 - use log instead of println
 - make a proper rank system (reuploading, uploading music, rating, etc.)
 - user icons in the account management + settings (gdicon.oat.zone? selfhost?)
-- account settings page
-- better web design
