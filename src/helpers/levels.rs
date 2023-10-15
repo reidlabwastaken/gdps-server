@@ -195,8 +195,19 @@ pub fn decode(level_data: String) -> Vec<HashMap<String, String>> {
 
     let mut decoder = GzDecoder::new(&decoded_bytes[..]);
 
-    let mut uncompressed_data = String::new();
-    decoder.read_to_string(&mut uncompressed_data).expect("err unzipping level");
+    let uncompressed_data = String::from_utf8(if decoded_bytes.starts_with(&[0x1F, 0x8B]) {
+        // gzip!!
+        let mut decompressed_data = Vec::new();
+        decoder.read_to_end(&mut decompressed_data).expect("err uncompressing level");
+        decompressed_data
+    } else if decoded_bytes.starts_with(&[0x78]) {
+        // zlib!!
+        let mut decompressed_data = Vec::new();
+        decoder.read_to_end(&mut decompressed_data).expect("err uncompressing level");
+        decompressed_data
+    } else {
+        panic!("invalid compression method")
+    }).expect("invalid utf-8 sequence");
 
     return parse(uncompressed_data.as_str())
 }

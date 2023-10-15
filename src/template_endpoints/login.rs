@@ -38,7 +38,6 @@ pub fn post_login(cookies: &CookieJar<'_>, input: Form<FormLogin>) -> Template {
                         "blackmail_data", 
                         format!("{}:{}:{}", account_id_username_val.1, account_id_user_id_val.0, account_id_user_id_val.1))
                         .path("/")
-                        // should probably make this true when we get into production
                         .secure(false)
                         .http_only(true)
                         .max_age(Duration::days(365))

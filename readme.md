@@ -32,14 +32,15 @@ i've run out of ideas.
 
 ## todo
 
-- account settings page
-- better web design
-- user icons in the account management + settings (gdicon.oat.zone? selfhost?) ideally we find a legal way to do this (i cant distribute the plist+asset files directly) but doing this illegally is always an option
-- use chrono
-- 2.2 friends only unlisted
-- add dailies, events, weekly
-- moderation utilities
-- better song support
-- authentication caching
-- use log instead of println
-- make a proper rank system (reuploading, uploading music, rating, etc.)
+- User icons in account management pages
+- Account settings page
+- Better web design
+- Use chrono for dates in database, add recent
+- 2.2's friends only unlisted
+- Dailies, weeklies, events(?)
+- Moderation utilities
+- Better song support
+- Cache authentication
+- Panic less
+- Make a proper rank system (reuploading, uploading music, rating, etc.)
+- Swap to a better web framework

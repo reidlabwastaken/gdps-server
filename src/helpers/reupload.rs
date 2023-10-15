@@ -21,8 +21,6 @@ pub fn init() {
             Ok(reupload_acc_id) => {
                 let mut write_lock = REUPLOAD_ACCOUNT_ID.write().expect("poisoned lock!!");
                 *write_lock = reupload_acc_id;
-
-                println!("reupload account found, id: {}", reupload_acc_id);
             },
             Err(_) => {
                 let new_account = NewAccount {
@@ -35,7 +33,7 @@ pub fn init() {
                 let inserted_account = diesel::insert_into(accounts::table)
                     .values(&new_account)
                     .get_result::<Account, >(connection)
-                    .expect("Fatal error saving the new account");
+                    .expect("error saving the new account");
 
                 let reupload_acc_id = inserted_account.id;
 
@@ -48,7 +46,7 @@ pub fn init() {
                 diesel::insert_into(users::table)
                     .values(&new_user)
                     .get_result::<User, >(connection)
-                    .expect("Fatal error saving the new user");
+                    .expect("error saving the new user");
 
                 let mut write_lock = REUPLOAD_ACCOUNT_ID.write().expect("poisoned lock!!");
                 *write_lock = reupload_acc_id;
