@@ -33,8 +33,9 @@ i've run out of ideas.
 ## todo
 
 - User icons in account management pages
+- Flesh out account management page
 - Account settings page
-- Better web design
+- Better web design (make formatting more consistant)
 - Use chrono for dates in database, add recent
 - 2.2's friends only unlisted
 - Dailies, weeklies, events(?)
@@ -43,4 +44,8 @@ i've run out of ideas.
 - Cache authentication
 - Panic less
 - Make a proper rank system (reuploading, uploading music, rating, etc.)
-- Swap to a better web framework
+- Use serde to make the forms whateverCaseThisIs rather than breaking our lint convention
+- Swap to `sqlx` im gonna be honest `diesel` is pretty shit.
+- Swap to `sqlite` from `postgres`. Postgres feels too clunky and it just solos honestly
+- Add back `realip` header support
+- Add configurable form limits

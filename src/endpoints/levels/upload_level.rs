@@ -8,7 +8,7 @@ use base64::{Engine as _, engine::general_purpose};
 
 use std::fs;
 
-use crate::config::CONFIG;
+use crate::config;
 use crate::helpers;
 use crate::db;
 
@@ -98,12 +98,12 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
     }
 
     // too many objects
-    if objects_val > CONFIG.levels.max_objects as usize {
+    if config::config_get_with_default("levels.max_objects", 0) != 0 && objects_val > config::config_get_with_default("levels.max_objects", 0) {
         return status::Custom(Status::Ok, "-1")
     }
-
+    
     // forbidden object checking
-    if let Some(_forbidden_object) = level_objects.iter().find(|obj| crate::CONFIG.levels.blocklist.contains(&obj.id())) {
+    if let Some(_forbidden_object) = level_objects.iter().find(|obj| config::config_get_with_default("levels.blocklist", Vec::new() as Vec<i32>).contains(&obj.id())) {
         return status::Custom(Status::Ok, "-1")
     }
 
@@ -158,7 +158,7 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                     .get_result::<Level, >(connection)
                     .expect("failed to update level");
 
-                fs::write(format!("{}/levels/{}.lvl", crate::CONFIG.db.data_folder, updated_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
+                fs::write(format!("{}/levels/{}.lvl", config::config_get_with_default("db.data_folder", "data"), updated_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
 
                 return status::Custom(Status::Ok, Box::leak(input.levelID.to_string().into_boxed_str()))
             } else {
@@ -194,7 +194,7 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
                     .get_result::<Level, >(connection)
                     .expect("failed to insert level");
                 
-                fs::write(format!("{}/levels/{}.lvl", crate::CONFIG.db.data_folder, inserted_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
+                fs::write(format!("{}/levels/{}.lvl", config::config_get_with_default("db.data_folder", "data"), inserted_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
 
                 return status::Custom(Status::Ok, "1")
             }

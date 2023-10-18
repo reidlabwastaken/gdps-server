@@ -13,8 +13,6 @@
 append_path = "/"
 # where can your server be accessible?
 port = 8000
-# your realip header, if you're behind a reverse proxy
-realip_header = "X-Real-IP"
 
 [accounts]
 # allow new accounts to be created

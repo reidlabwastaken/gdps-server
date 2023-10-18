@@ -13,6 +13,7 @@ use std::fs;
 use std::io::prelude::*;
 
 use crate::helpers;
+use crate::config;
 use crate::db;
 
 #[derive(FromForm)]
@@ -98,7 +99,7 @@ pub fn download_level(input: Form<FormDownloadLevel>) -> status::Custom<&'static
             xor_pass = level.password.clone().unwrap_or(String::from("0"));
         }
 
-        let compressed_level_data = fs::read(format!("{}/{}/{}.lvl", crate::CONFIG.db.data_folder, "levels", level.id)).expect("couldnt read level file");
+        let compressed_level_data = fs::read(format!("{}/{}/{}.lvl", config::config_get_with_default("db.data_folder", "data"), "levels", level.id)).expect("couldnt read level file");
 
         let uncompressed_level_data = String::from_utf8(if compressed_level_data.starts_with(&[0x1F, 0x8B]) {
             // gzip!!

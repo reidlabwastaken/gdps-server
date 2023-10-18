@@ -38,15 +38,14 @@ fn rocket() -> _ {
     crate::helpers::reupload::init();
 
     // data directories
-    // this is a bit scuffed
-    fs::create_dir_all(&CONFIG.db.data_folder).expect("failed to create data directory!");
-    fs::create_dir_all(format!("{}/levels", &CONFIG.db.data_folder)).expect("failed to create data directory for levels");
+    // unhardcore this maybe?
+    fs::create_dir_all(config::config_get_with_default("db.data_folder", "data")).expect("failed to create data directory!");
+    fs::create_dir_all(format!("{}/levels", config::config_get_with_default("db.data_folder", "data"))).expect("failed to create data directory for levels");
     
     rocket::build()
         // conf
         .configure(rocket::Config::figment()
-            .merge(("port", CONFIG.general.port))
-            .merge(("ip_header", CONFIG.general.realip_header.as_str()))
+            .merge(("port", config::config_get_with_default("general.port", 8000)))
             .merge(("limits", Limits::new().limit("forms", 10.megabytes()))))
         // actual website
         .mount("/", routes![
@@ -67,7 +66,7 @@ fn rocket() -> _ {
             files
         ]) 
         // https://www.youtube.com/watch?v=_pLrtsf5yfE
-        .mount(CONFIG.general.append_path.as_str(), routes![
+        .mount(config::config_get_with_default("general.append_path", "/"), routes![
             endpoints::accounts::login_account::login_account,
             endpoints::accounts::register_account::register_account,
             endpoints::accounts::update_account_settings::update_account_settings,

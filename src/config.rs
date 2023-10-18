@@ -1,52 +1,27 @@
-use serde::Deserialize;
-
 use std::fs;
 
 use std::sync::LazyLock;
 
-#[derive(Deserialize)]
-pub struct Config {
-    pub general: ConfigGeneral,
-    pub accounts: ConfigAccounts,
-    pub db: ConfigDB,
-    pub levels: ConfigLevels
-}
+use toml::Table;
 
-#[derive(Deserialize)]
-pub struct ConfigGeneral {
-    pub append_path: String,
-    pub port: u16,
-    pub realip_header: String
-}
+pub static CONFIG: LazyLock<Table> = LazyLock::new(|| {
+    let toml_str = fs::read_to_string("config.toml").expect("error finding toml config");
+    let config: Table = toml::from_str(toml_str.as_str()).expect("error parsing toml config");
 
-#[derive(Deserialize)]
-pub struct ConfigAccounts {
-    pub allow_registration: bool
-}
-
-#[derive(Deserialize)]
-pub struct ConfigDB {
-    pub data_folder: String
-}
-
-#[derive(Deserialize)]
-pub struct ConfigLevels {
-    pub max_objects: i32,
-    pub blocklist: Vec<i32>,
-    pub reupload: bool
-}
-
-impl Config {
-    pub fn load_from_file(file_path: &str) -> Self {
-        let toml_str = fs::read_to_string(file_path).expect("Error finding toml config:");
-        let config: Config = toml::from_str(toml_str.as_str()).expect("Error parsing toml config:");
-
-        return config;
-    }
-}
-
-pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
-    let config = Config::load_from_file("config.toml");
-    
     return config;
 });
+
+pub fn config_get(key: &str) -> Option<&toml::Value> {
+    let this = &CONFIG;
+    let mut current = this.get(key)?;
+    for val in key.split(".").skip(1) {
+        current = current.as_table()?.get(val)?;
+    }
+    Some(current)
+}
+
+pub fn config_get_with_default<T: serde::Deserialize<'static>>(key: &str, default: T) -> T {
+    config_get(key)
+        .and_then(|v| v.clone().try_into().ok())
+        .unwrap_or(default)
+}

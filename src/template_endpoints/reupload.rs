@@ -16,6 +16,7 @@ use diesel::prelude::*;
 
 use crate::helpers;
 use crate::db;
+use crate::config;
 
 #[derive(Deserialize)]
 struct LevelResults {
@@ -39,7 +40,7 @@ pub struct FormReupload {
 pub async fn post_reupload(input: Form<FormReupload>) -> Template {
     let connection = &mut db::establish_connection_pg();
 
-    let disabled = !crate::CONFIG.levels.reupload;
+    let disabled = !config::config_get_with_default("levels.reupload", true);
 
     if !disabled {
         let remote_level_id = input.level_id;
@@ -105,7 +106,7 @@ pub async fn post_reupload(input: Form<FormReupload>) -> Template {
             .get_result::<Level, >(connection)
             .expect("failed to insert level");
 
-        fs::write(format!("{}/levels/{}.lvl", crate::CONFIG.db.data_folder, inserted_level.id), general_purpose::URL_SAFE.decode(level_data.get("k4").expect("no level data?!").as_bytes()).expect("user provided invalid level string")).expect("couldnt write level to file");
+        fs::write(format!("{}/levels/{}.lvl", config::config_get_with_default("db.data_folder", "data"), inserted_level.id), general_purpose::URL_SAFE.decode(level_data.get("k4").expect("no level data?!").as_bytes()).expect("user provided invalid level string")).expect("couldnt write level to file");
     
         return Template::render("reupload", context! { 
             level_id: inserted_level.id
@@ -119,7 +120,7 @@ pub async fn post_reupload(input: Form<FormReupload>) -> Template {
 
 #[get("/tools/reupload")]
 pub fn get_reupload() -> Template {
-    let disabled = !crate::CONFIG.levels.reupload;
+    let disabled = !config::config_get_with_default("levels.reupload", true);
 
     Template::render("reupload", context! { 
         disabled: disabled

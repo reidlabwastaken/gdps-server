@@ -7,7 +7,7 @@ use diesel::result::Error;
 
 use password_auth::generate_hash;
 
-use crate::CONFIG;
+use crate::config;
 use crate::helpers;
 use crate::db;
 
@@ -22,7 +22,7 @@ pub struct FormRegisterAccount {
 pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
     
-    if CONFIG.accounts.allow_registration == false {
+    if config::config_get_with_default("accounts.allow_registration", true) == false {
         return status::Custom(Status::Ok, "-1")
     }
 
@@ -55,7 +55,7 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
         use crate::schema::accounts::dsl::*;
 
         let account_name_usage = accounts.filter(username.eq(input.userName.clone())).count().get_result::<i64>(connection) as Result<i64, Error>;
-        let account_name_used = account_name_usage.expect("Fatal database name query error") != 0;
+        let account_name_used = account_name_usage.expect("database name query error") != 0;
         if account_name_used {
             return status::Custom(Status::Ok, "-2")
         }
@@ -70,7 +70,7 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
         inserted_account = diesel::insert_into(accounts)
             .values(&new_account)
             .get_result::<Account, >(connection)
-            .expect("Fatal error saving the new account");
+            .expect("error saving the new account");
     }
 
     // user management
@@ -88,7 +88,7 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
         diesel::insert_into(users)
             .values(&new_user)
             .get_result::<User, >(connection)
-            .expect("Fatal error saving the new user");
+            .expect("error saving the new user");
     }
 
     return status::Custom(Status::Ok, "1")
