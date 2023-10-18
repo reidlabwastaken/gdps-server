@@ -44,8 +44,8 @@ pub struct FormGetLevels {
 pub fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
 
-    use crate::schema::{levels, users};
-    use crate::models::{Level, User};
+    use db::schema::{levels, users};
+    use db::models::{Level, User};
 
     let mut can_see_unlisted = false;
     
@@ -145,35 +145,35 @@ pub fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static str> {
                     Some(demon_filter) => {
                         match demon_filter {
                             1 => {
-                                query = query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Easy.to_demon_difficulty()));
-                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Easy.to_demon_difficulty()))
+                                query = query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Easy.to_demon_difficulty()));
+                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Easy.to_demon_difficulty()))
                             },
                             2 => {
-                                query = query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Medium.to_demon_difficulty()));
-                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Medium.to_demon_difficulty()))
+                                query = query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Medium.to_demon_difficulty()));
+                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Medium.to_demon_difficulty()))
                             },
                             3 => {
-                                query = query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Hard.to_demon_difficulty()));
-                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Hard.to_demon_difficulty()))
+                                query = query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Hard.to_demon_difficulty()));
+                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Hard.to_demon_difficulty()))
                             },
                             4 => {
-                                query = query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Insane.to_demon_difficulty()));
-                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Insane.to_demon_difficulty()))
+                                query = query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Insane.to_demon_difficulty()));
+                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Insane.to_demon_difficulty()))
                             },
                             5 => {
-                                query = query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Extreme.to_demon_difficulty()));
-                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(crate::difficulty::DemonDifficulty::Extreme.to_demon_difficulty()))
+                                query = query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Extreme.to_demon_difficulty()));
+                                count_query = count_query.filter(levels::demon_difficulty.eq::<i32>(helpers::difficulty::DemonDifficulty::Extreme.to_demon_difficulty()))
                             },
                             _ => panic!("invalid demon filter!")
                         }
-                        query = query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Demon.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Demon.to_star_difficulty()))));
-                        count_query = count_query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Demon.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Demon.to_star_difficulty()))))
+                        query = query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Demon.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Demon.to_star_difficulty()))));
+                        count_query = count_query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Demon.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Demon.to_star_difficulty()))))
                     },
                     None => panic!("demon filter option with no demon filter argument")
                 },
                 "-3" => {
-                    query = query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Auto.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Auto.to_star_difficulty()))));
-                    count_query = count_query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Auto.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(crate::difficulty::LevelDifficulty::Auto.to_star_difficulty()))))
+                    query = query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Auto.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Auto.to_star_difficulty()))));
+                    count_query = count_query.filter(diesel::BoolExpressionMethods::or(levels::difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Auto.to_star_difficulty()), levels::difficulty.is_null().and(levels::community_difficulty.eq::<i32>(helpers::difficulty::LevelDifficulty::Auto.to_star_difficulty()))))
                 },
                 // easy, normal, hard, harder, insane 
                 _ => {

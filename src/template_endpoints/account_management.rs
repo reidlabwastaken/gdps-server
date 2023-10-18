@@ -16,8 +16,8 @@ pub fn account_management(cookies: &CookieJar<'_>) -> Result<Template, Redirect>
 
     match logged_in {
         Ok((username_val, _account_id_val, user_id_val)) => {
-            use crate::schema::users::dsl::*;
-            use crate::models::User;
+            use db::schema::users::dsl::*;
+            use db::models::User;
     
             let result = users
                 .filter(id.eq(user_id_val))

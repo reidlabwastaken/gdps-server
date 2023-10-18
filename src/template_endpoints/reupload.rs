@@ -71,8 +71,8 @@ pub async fn post_reupload(input: Form<FormReupload>) -> Template {
         let gmd_file = reqwest::get(format!("https://history.geometrydash.eu/level/{}/{}/download/", remote_level_id, level.id)).await.expect("failed to fetch gmd file from remote server");
         let level_data = helpers::levels::gmd_parse(&gmd_file.text().await.expect("failed to parse gmd file as text"));
     
-        use crate::schema::levels::dsl::*;
-        use crate::models::{Level, NewLevel};
+        use db::schema::levels::dsl::*;
+        use db::models::{Level, NewLevel};
 
         let new_level = NewLevel {
             name: level_data.get("k2").expect("level name not found").to_string(),

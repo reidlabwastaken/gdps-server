@@ -27,9 +27,8 @@ pub struct FormDownloadLevel {
 pub fn download_level(input: Form<FormDownloadLevel>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
 
-    use crate::schema::{levels, users};
-
-    use crate::models::{Level, User};
+    use db::schema::{levels, users};
+    use db::models::{Level, User};
 
     let mut response: Vec<String> = Vec::new();
 

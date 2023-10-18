@@ -113,10 +113,10 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
     }
 
     // data base 🤣😁
-    use crate::models::{Level, NewLevel};
-
+    
     {
-        use crate::schema::levels::dsl::*;
+        use db::models::{Level, NewLevel};
+        use db::schema::levels::dsl::*;
 
         if levels
             .filter(id.eq(input.levelID))

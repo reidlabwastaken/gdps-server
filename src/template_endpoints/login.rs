@@ -23,7 +23,7 @@ pub struct FormLogin {
 pub fn post_login(cookies: &CookieJar<'_>, input: Form<FormLogin>) -> Template {
     let connection = &mut db::establish_connection_pg();
 
-    use crate::schema::accounts::dsl::*;
+    use db::schema::accounts::dsl::*;
 
     let result = accounts
         .select((id, username))

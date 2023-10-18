@@ -18,8 +18,8 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
     let connection = &mut db::establish_connection_pg();
 
     // query users
-    use crate::schema::users::dsl::*;
-    use crate::models::User;
+    use db::schema::users::dsl::*;
+    use db::models::User;
 
     let mut query_users = users.into_boxed();
 

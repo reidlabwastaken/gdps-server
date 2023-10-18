@@ -11,8 +11,8 @@ pub static REUPLOAD_ACCOUNT_ID: RwLock<i32> = RwLock::new(0);
 pub fn init() {
     let connection = &mut db::establish_connection_pg();
 
-    use crate::schema::{accounts, users};
-    use crate::models::{Account, NewAccount, User, NewUser};
+    use db::schema::{accounts, users};
+    use db::models::{Account, NewAccount, User, NewUser};
 
     match accounts::table
         .filter(accounts::username.eq(REUPLOAD_USER_NAME))

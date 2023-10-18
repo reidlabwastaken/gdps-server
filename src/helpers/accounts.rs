@@ -10,7 +10,7 @@ pub enum AuthError {
 }
 
 pub fn auth(account_id: i32, password_val: Option<String>, gjp_val: Option<String>, gjp2_val: Option<String>) -> Result<(i32, i32), AuthError> {
-    use crate::schema::accounts::dsl::*;
+    use db::schema::accounts::dsl::*;
 
     let connection = &mut db::establish_connection_pg();
 
@@ -57,7 +57,7 @@ pub fn auth(account_id: i32, password_val: Option<String>, gjp_val: Option<Strin
 }
 
 pub fn get_user_id_from_account_id(ext_id: i32) -> i32 {
-    use crate::schema::users::dsl::*;
+    use db::schema::users::dsl::*;
 
     let connection = &mut db::establish_connection_pg();
 

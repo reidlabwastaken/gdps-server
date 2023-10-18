@@ -13,19 +13,10 @@ use rocket::data::{Limits, ToByteUnit};
 use rocket_dyn_templates::Template;
 
 mod db;
-use db::*;
-
 mod helpers;
-use helpers::*;
-
 mod endpoints;
-use endpoints::*;
-
 mod template_endpoints;
-use template_endpoints::*;
-
 mod config;
-use config::*;
 
 #[get("/<file..>")]
 async fn files(file: PathBuf) -> Option<NamedFile> {

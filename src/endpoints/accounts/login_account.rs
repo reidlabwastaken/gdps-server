@@ -40,7 +40,7 @@ pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static s
 
     // account verification
     {
-        use crate::schema::accounts::dsl::*;
+        use db::schema::accounts::dsl::*;
 
         let query_result = accounts
             .select(id)

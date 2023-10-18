@@ -47,12 +47,12 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
     }
 
     // account management
-    use crate::models::{Account, NewAccount};
+    use db::models::{Account, NewAccount};
 
     let inserted_account: Account;
 
     {
-        use crate::schema::accounts::dsl::*;
+        use db::schema::accounts::dsl::*;
 
         let account_name_usage = accounts.filter(username.eq(input.userName.clone())).count().get_result::<i64>(connection) as Result<i64, Error>;
         let account_name_used = account_name_usage.expect("database name query error") != 0;
@@ -74,10 +74,10 @@ pub fn register_account(input: Form<FormRegisterAccount>) -> status::Custom<&'st
     }
 
     // user management
-    use crate::models::{User, NewUser};
-
+    
     {
-        use crate::schema::users::dsl::*;
+        use db::models::{User, NewUser};
+        use db::schema::users::dsl::*;
 
         let new_user = NewUser {
             account_id: inserted_account.id,

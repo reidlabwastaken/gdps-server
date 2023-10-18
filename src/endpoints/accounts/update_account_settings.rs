@@ -39,10 +39,10 @@ pub fn update_account_settings(input: Form<FormUpdateAccountSettings>) -> status
         Err(_) => return status::Custom(Status::Ok, "-1")
     };
 
-    use crate::models::Account;
-
+    
     {
-        use crate::schema::accounts::dsl::*;
+        use db::models::Account;
+        use db::schema::accounts::dsl::*;
 
         diesel::update(accounts)
             .filter(id.eq(account_id_val))
