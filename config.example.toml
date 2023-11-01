@@ -11,16 +11,8 @@
 #               ^^^^^^^^^^^
 # leaving as empty will disable this
 append_path = ""
-# where can your server be accessible (port)?
+# where can your server be accessible?
 port = 8000
-# where can your server be accessible (domain)?
-# this is used for patching the executable
-#
-# example:
-#  boomlings.com
-#  localhost:8000
-domain = "localhost:8000"
-
 [accounts]
 # allow new accounts to be created
 allow_registration = true
