@@ -54,3 +54,4 @@ add `--help` or `-h` when calling the binary for special tools, such as patching
 - nix
 - clean up difficulty/demon difficulties. It's fucking VILE.
 - panic less, use results
+- use anyhow for error handling
