@@ -25,11 +25,10 @@ async fn files(file: PathBuf) -> Option<NamedFile> {
 
 #[launch]
 async fn rocket() -> _ {
-    // init stuff
+    // initiate database stuff
     crate::helpers::reupload::init().await;
 
     // data directories
-    // unhardcore this maybe?
     fs::create_dir_all(config::config_get_with_default("db.data_folder", "data".to_string())).expect("failed to create data directory!");
     fs::create_dir_all(format!("{}/levels", config::config_get_with_default("db.data_folder", "data".to_string()))).expect("failed to create data directory for levels");
     

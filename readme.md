@@ -37,7 +37,6 @@ add `--help` or `-h` when calling the binary for special tools, such as patching
 
 ## todo
 
-- add get levels search back (find how to easily do dynamic queries)
 - user icons in account management pages
 - account settings page
 - better web design (make formatting more consistant)
