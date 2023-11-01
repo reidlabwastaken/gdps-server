@@ -347,16 +347,6 @@ pub async fn get_levels(input: Form<FormGetLevels>) -> status::Custom<&'static s
         .await
         .expect("error getting level count");
 
-    // for goop in {
-    //     query
-    //         .fetch_all(&mut connection)
-    //         .await
-    //         .expect("error loading levels")
-    // } {
-    //     println!("lvl id: {:?}", goop.id);
-    //     println!("user id: {:?}", goop.user_id);
-    // }
-
     for result in {
         query
             .fetch_all(&mut connection)
