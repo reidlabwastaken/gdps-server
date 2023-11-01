@@ -31,10 +31,6 @@ run `sqlx database setup`
 
 then finally run the server with `cargo run`
 
-## CLI tools
-
-add `--help` or `-h` when calling the binary for special tools, such as patching executables.
-
 ## todo
 
 - user icons in account management pages
