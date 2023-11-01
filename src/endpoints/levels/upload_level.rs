@@ -2,8 +2,6 @@ use rocket::form::Form;
 use rocket::http::Status;
 use rocket::response::status;
 
-use diesel::prelude::*;
-
 use base64::{Engine as _, engine::general_purpose};
 
 use std::fs;
@@ -14,7 +12,7 @@ use crate::db;
 
 #[derive(FromForm)]
 pub struct FormUploadLevel {
-    accountID: i32,
+    accountID: i64,
     
     gjp: Option<String>,
     gjp2: Option<String>,
@@ -24,7 +22,7 @@ pub struct FormUploadLevel {
     audioTrack: i32,
     levelName: String,
     levelDesc: String,
-    levelID: i32,
+    levelID: i64,
     levelVersion: i32,
     levelInfo: String,
     levelString: String,
@@ -40,14 +38,14 @@ pub struct FormUploadLevel {
 }
 
 #[post("/uploadGJLevel21.php", data = "<input>")]
-pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str> {
-    let connection = &mut db::establish_connection_pg();
+pub async fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str> {
+    let mut connection = db::establish_sqlite_conn().await;
     
     // account verification
-    let (user_id_val, _account_id_val): (i32, i32);
+    let (user_id_val, _account_id_val): (i64, i64);
 
     // password argument is used for the level, so
-    match helpers::accounts::auth(input.accountID.clone(), None, input.gjp.clone(), input.gjp2.clone()) {
+    match helpers::accounts::auth(input.accountID.clone(), None, input.gjp.clone(), input.gjp2.clone()).await {
         Ok((user_id, account_id)) => {
             user_id_val = user_id;
             _account_id_val = account_id;
@@ -91,112 +89,93 @@ pub fn upload_level(input: Form<FormUploadLevel>) -> status::Custom<&'static str
     let objects_val = level_objects.len();
     let two_player_val = if inner_level_string.get("kA10").unwrap_or(&String::from("0")).parse::<i32>().expect("kA10 not int") == 1 { 1 } else { 0 };
     let level_length_val = helpers::levels::secs_to_time(level_length_secs);
-
+    
     // blocking coins
     if coins_val > 3 {
         return status::Custom(Status::Ok, "-1")
     }
-
+    
     // too many objects
-    if config::config_get_with_default("levels.max_objects", 0) != 0 && objects_val > config::config_get_with_default("levels.max_objects", 0) {
+    let max_objects = config::config_get_with_default("levels.max_objects", 0) as usize;
+    if max_objects != 0 && objects_val > max_objects {
         return status::Custom(Status::Ok, "-1")
     }
     
     // forbidden object checking
-    if let Some(_forbidden_object) = level_objects.iter().find(|obj| config::config_get_with_default("levels.blocklist", Vec::new() as Vec<i32>).contains(&obj.id())) {
+    if let Some(_obj) = level_objects.iter().find(|obj| config::config_get_with_default("levels.blocklist", Vec::new() as Vec<i32>).contains(&obj.id())) {
         return status::Custom(Status::Ok, "-1")
     }
-
-    // ACE vulnerability check
-    if let Some(_ace_object) = level_objects.iter().find(|obj| obj.item_block_id() < Some(0) || obj.item_block_id() > Some(1100)) {
-        return status::Custom(Status::Ok, "-1")
-    }
-
-    // data base 🤣😁
     
-    {
-        use db::models::{Level, NewLevel};
-        use db::schema::levels::dsl::*;
-
-        if levels
-            .filter(id.eq(input.levelID))
-            .count()
-            .get_result::<i64>(connection)
-            .expect("couldnt get count of levels") > 0 {
-                // update level
-                let level_user_id = levels
-                    .filter(id.eq(input.levelID))
-                    .select(user_id)
-                    .get_result::<i32>(connection)
-                    .expect("couldnt query levels");
-
-                if level_user_id != user_id_val {
-                    return status::Custom(Status::Ok, "-1")
-                }
-
-                let updated_level = diesel::update(levels)
-                    .filter(id.eq(input.levelID))
-                    .set((
-                        description.eq(description_val.chars().take(140).collect::<String>()),
-                        password.eq(input.password.clone()),
-                        requested_stars.eq(match input.requestedStars {
-                            Some(requested_stars_val) => requested_stars_val.clamp(0, 10),
-                            None => 0
-                        }),
-                        version.eq(input.levelVersion),
-                        extra_data.eq(extra_string.as_bytes().to_owned()),
-                        level_info.eq(input.levelInfo.clone().into_bytes()),
-                        editor_time.eq(input.wt.unwrap_or(0)),
-                        editor_time_copies.eq(input.wt2.unwrap_or(0)),
-                        song_id.eq(song_id_val),
-                        length.eq(level_length_val),
-                        objects.eq(objects_val as i32),
-                        coins.eq(coins_val as i32),
-                        has_ldm.eq(input.ldm.unwrap_or(0).clamp(0, 1)),
-                        two_player.eq(two_player_val)
-                    ))
-                    .get_result::<Level, >(connection)
-                    .expect("failed to update level");
-
-                fs::write(format!("{}/levels/{}.lvl", config::config_get_with_default("db.data_folder", "data"), updated_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
-
-                return status::Custom(Status::Ok, Box::leak(input.levelID.to_string().into_boxed_str()))
-            } else {
-                // upload level
-                let new_level = NewLevel {
-                    name: helpers::clean::clean_basic(&input.levelName).chars().take(20).collect(),
-                    user_id: user_id_val,
-                    description: description_val.chars().take(140).collect(),
-                    original: input.original,
-                    game_version: input.gameVersion,
-                    binary_version: input.binaryVersion.unwrap_or(0),
-                    password: input.password.clone(),
-                    requested_stars: match input.requestedStars {
-                        Some(requested_stars_val) => requested_stars_val.clamp(0, 10),
-                        None => 0
-                    },
-                    unlisted: input.unlisted.unwrap_or(0).clamp(0, 1),
-                    version: input.levelVersion,
-                    extra_data: extra_string.as_bytes().to_owned(),
-                    level_info: input.levelInfo.clone().into_bytes(),
-                    editor_time: input.wt.unwrap_or(0),
-                    editor_time_copies: input.wt2.unwrap_or(0),
-                    song_id: song_id_val,
-                    length: level_length_val,
-                    objects: objects_val as i32,
-                    coins: coins_val as i32,
-                    has_ldm: input.ldm.unwrap_or(0).clamp(0, 1),
-                    two_player: two_player_val
-                };
-
-                let inserted_level = diesel::insert_into(levels)
-                    .values(&new_level)
-                    .get_result::<Level, >(connection)
-                    .expect("failed to insert level");
-                
-                fs::write(format!("{}/levels/{}.lvl", config::config_get_with_default("db.data_folder", "data"), inserted_level.id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
-
-                return status::Custom(Status::Ok, "1")
-            }
+    // ACE vulnerability check
+    for obj in level_objects.iter().filter(|obj| obj.item_block_id().is_some()) {
+        if obj.item_block_id() < Some(0) || obj.item_block_id() > Some(1100) {
+            return status::Custom(Status::Ok, "-1");
+        }
     }
+
+    if sqlx::query_scalar!("SELECT COUNT(*) FROM levels WHERE id = ?", input.levelID)
+        .fetch_one(&mut connection)
+        .await
+        .expect("error getting level count") > 0 {
+            // update level
+
+            let level_user_id = sqlx::query!("SELECT user_id FROM levels WHERE id = ?", input.levelID)
+                .fetch_one(&mut connection)
+                .await
+                .expect("error getting level user id")
+                .user_id;
+
+            if level_user_id != user_id_val {
+                return status::Custom(Status::Ok, "-1")
+            }
+
+            let new_description = description_val.chars().take(140).collect::<String>();
+            let new_password = input.password.clone();
+            let new_requested_stars = match input.requestedStars { Some(requested_stars_val) => requested_stars_val.clamp(0, 10), None => 0 };
+            let new_extra_string = extra_string.as_bytes().to_owned();
+            let new_level_info = input.levelInfo.clone().into_bytes();
+            let new_editor_time = input.wt.unwrap_or(0);
+            let new_editor_time_copies = input.wt2.unwrap_or(0);
+            let new_objects = objects_val as i64;
+            let new_coins = coins_val as i64;
+            let new_ldm = input.ldm.unwrap_or(0).clamp(0, 1);
+
+            let updated_level = sqlx::query!("UPDATE levels SET description = ?, password = ?, requested_stars = ?, version = ?, extra_data = ?, level_info = ?, editor_time = ?, editor_time_copies = ?, song_id = ?, length = ?, objects = ?, coins = ?, has_ldm = ?, two_player = ? WHERE id = ?",new_description, new_password, new_requested_stars, input.levelVersion, new_extra_string, new_level_info, new_editor_time, new_editor_time_copies, song_id_val, level_length_val, new_objects, new_coins, new_ldm, two_player_val, input.levelID)
+                .execute(&mut connection)
+                .await
+                .expect("error updating level");
+
+            let updated_level_id = updated_level.last_insert_rowid();
+
+            fs::write(format!("{}/levels/{}.lvl", config::config_get_with_default("db.data_folder", "data".to_string()), updated_level_id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
+
+            return status::Custom(Status::Ok, Box::leak(input.levelID.to_string().into_boxed_str()))
+        } else {
+            // insert level
+
+            let new_name = helpers::clean::clean_basic(&input.levelName).chars().take(20).collect::<String>();
+            let new_description = description_val.chars().take(140).collect::<String>();
+            let new_binary_version = input.binaryVersion.unwrap_or(0);
+            let new_password = input.password.clone();
+            let new_requested_stars = match input.requestedStars { Some(requested_stars_val) => requested_stars_val.clamp(0, 10), None => 0 };
+            let new_unlisted = input.unlisted.unwrap_or(0).clamp(0, 1);
+            let new_extra_string = extra_string.as_bytes().to_owned();
+            let new_level_info = input.levelInfo.clone().into_bytes();
+            let new_editor_time = input.wt.unwrap_or(0);
+            let new_editor_time_copies = input.wt2.unwrap_or(0);
+            let new_objects = objects_val as i64;
+            let new_coins = coins_val as i64;
+            let new_ldm = input.ldm.unwrap_or(0).clamp(0, 1);
+
+            let inserted_level = sqlx::query!("INSERT INTO levels (name, user_id, description, original, game_version, binary_version, password, requested_stars, unlisted, version, extra_data, level_info, editor_time, editor_time_copies, song_id, length, objects, coins, has_ldm, two_player) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new_name, user_id_val, new_description, input.original, input.gameVersion, new_binary_version, new_password, new_requested_stars, new_unlisted, input.levelVersion, new_extra_string, new_level_info, new_editor_time, new_editor_time_copies, song_id_val, level_length_val, new_objects, new_coins, new_ldm, two_player_val)
+                .execute(&mut connection)
+                .await
+                .expect("error inserting level");
+
+            let inserted_level_id = inserted_level.last_insert_rowid();
+
+            fs::write(format!("{}/levels/{}.lvl", config::config_get_with_default("db.data_folder", "data".to_string()), inserted_level_id), general_purpose::URL_SAFE.decode(input.levelString.clone()).expect("user provided invalid level string")).expect("couldnt write level to file");
+
+            return status::Custom(Status::Ok, Box::leak(inserted_level_id.to_string().into_boxed_str()))
+        }
 }

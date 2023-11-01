@@ -2,8 +2,6 @@ use rocket::form::Form;
 use rocket::http::Status;
 use rocket::response::status;
 
-use diesel::prelude::*;
-
 use crate::helpers;
 use crate::db;
 
@@ -14,31 +12,21 @@ pub struct FormGetUsers {
 }
 
 #[post("/getGJUsers20.php", data = "<input>")]
-pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
-    let connection = &mut db::establish_connection_pg();
+pub async fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
+    let mut connection = db::establish_sqlite_conn().await;
 
-    // query users
-    use db::schema::users::dsl::*;
-    use db::models::User;
+    let username = input.str.to_owned() + "%";
+    let offset = input.page * 10;
 
-    let mut query_users = users.into_boxed();
-
-    match input.str.parse::<i32>() {
-        Ok(id_value) => query_users = query_users.filter(id.eq(id_value)),
-        Err(_) => query_users = query_users.filter(username.ilike(input.str.to_owned() + "%"))
-    };
+    let query_results = sqlx::query!("SELECT * FROM users WHERE id = ? OR username LIKE ? ORDER BY stars DESC LIMIT 10 OFFSET ?", input.str, username, offset)
+        .fetch_all(&mut connection)
+        .await
+        .expect("Fatal error loading users");
 
     let mut results: Vec<String> = vec![];
 
-    for result in {
-        query_users
-            .order(stars.desc())
-            .offset(input.page * 10)
-            .limit(10)
-            .get_results::<User, >(connection)
-            .expect("Fatal error loading users")
-    } {
-        let user: User = result;
+    for result in query_results {
+        let user = result;
 
         let formatted_result = helpers::format::format(hashmap! {
             1 => user.username,
@@ -75,22 +63,15 @@ pub fn get_users(input: Form<FormGetUsers>) -> status::Custom<&'static str> {
         results.push(formatted_result)
     };
 
-    let mut query_users_count = users.into_boxed();
-
-    match input.str.parse::<i32>() {
-        Ok(id_value) => query_users_count = query_users_count.filter(id.eq(id_value)),
-        Err(_) => query_users_count = query_users_count.filter(username.ilike(input.str.to_owned() + "%"))
-    };
-
-    let amount = query_users_count
-        .count()
-        .get_result::<i64>(connection)
-        .expect("error querying user count");
+    let amount = sqlx::query_scalar!("SELECT COUNT(*) FROM users WHERE id = ? OR username LIKE ?", input.str, username)
+        .fetch_one(&mut connection)
+        .await
+        .expect("error loading users");
 
     let response = if results.is_empty() {
         String::from("-1")
     } else {
-        vec![results.join("|"), format!("{}:{}:10", amount, input.page * 10)].join("#")
+        vec![results.join("|"), format!("{}:{}:10", amount, offset)].join("#")
     };
 
     return status::Custom(Status::Ok, Box::leak(response.into_boxed_str()))

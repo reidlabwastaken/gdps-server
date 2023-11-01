@@ -10,7 +10,7 @@ pub enum LevelDifficulty {
 }
 
 impl LevelDifficulty {
-    pub fn new(value: i32) -> LevelDifficulty {
+    pub fn new(value: i64) -> LevelDifficulty {
         match value {
             0 => LevelDifficulty::Auto,
             1 => LevelDifficulty::Easy,
@@ -23,7 +23,7 @@ impl LevelDifficulty {
         }
     }
 
-    pub fn value(self) -> i32 {
+    pub fn value(self) -> i64 {
         match self {
             LevelDifficulty::Auto => 0,
             LevelDifficulty::Easy => 1,
@@ -35,7 +35,7 @@ impl LevelDifficulty {
         }
     }
 
-    pub fn to_star_difficulty(self) -> i32 {
+    pub fn to_star_difficulty(self) -> i64 {
         match self {
             LevelDifficulty::Auto => 5,
             LevelDifficulty::Easy => 1,
@@ -47,7 +47,7 @@ impl LevelDifficulty {
         }
     }
 
-    pub fn stars_to_diff(stars: i32) -> Self {
+    pub fn stars_to_diff(stars: i64) -> Self {
         match stars {
             1 => LevelDifficulty::Auto,
             2 => LevelDifficulty::Easy,
@@ -70,7 +70,7 @@ pub enum DemonDifficulty {
 }
 
 impl DemonDifficulty {
-    pub fn new(value: i32) -> DemonDifficulty {
+    pub fn new(value: i64) -> DemonDifficulty {
         match value {
             0 => DemonDifficulty::Easy,
             1 => DemonDifficulty::Medium,
@@ -81,7 +81,7 @@ impl DemonDifficulty {
         }
     }
 
-    pub fn value(self) -> i32 {
+    pub fn value(self) -> i64 {
         match self {
             DemonDifficulty::Easy => 0,
             DemonDifficulty::Medium => 1,
@@ -91,7 +91,7 @@ impl DemonDifficulty {
         }
     }
 
-    pub fn to_demon_difficulty(self) -> i32 {
+    pub fn to_demon_difficulty(self) -> i64 {
         match self {
             DemonDifficulty::Easy => 3,
             DemonDifficulty::Medium => 4,

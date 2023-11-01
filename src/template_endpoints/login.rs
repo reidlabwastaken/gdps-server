@@ -8,8 +8,6 @@ use rocket::http::{Cookie, CookieJar};
 
 use rocket::time::Duration;
 
-use diesel::prelude::*;
-
 use crate::db;
 use crate::helpers;
 
@@ -20,23 +18,22 @@ pub struct FormLogin {
 }
 
 #[post("/login", data = "<input>")]
-pub fn post_login(cookies: &CookieJar<'_>, input: Form<FormLogin>) -> Template {
-    let connection = &mut db::establish_connection_pg();
+pub async fn post_login(cookies: &CookieJar<'_>, input: Form<FormLogin>) -> Template {
+    let connection = &mut db::establish_sqlite_conn().await;
 
-    use db::schema::accounts::dsl::*;
-
-    let result = accounts
-        .select((id, username))
-        .filter(username.eq(input.username.clone()))
-        .get_result::<(i32, String), >(connection);
+    let result = sqlx::query!("SELECT id, username FROM accounts WHERE username = ?", input.username)
+        .fetch_one(connection)
+        .await;
 
     match result {
-        Ok(account_id_username_val) => {
-            match helpers::accounts::auth(account_id_username_val.0, Some(input.password.clone()), None, None) {
+        Ok(result) => {
+            let account_username = result.username;
+
+            match helpers::accounts::auth(result.id, Some(input.password.clone()), None, None).await {
                 Ok(account_id_user_id_val) => {
                     cookies.add_private(Cookie::build(
                         "blackmail_data", 
-                        format!("{}:{}:{}", account_id_username_val.1, account_id_user_id_val.0, account_id_user_id_val.1))
+                        format!("{}:{}:{}", account_username, result.id, account_id_user_id_val.1))
                         .path("/")
                         .secure(false)
                         .http_only(true)

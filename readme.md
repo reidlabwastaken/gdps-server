@@ -6,7 +6,7 @@ this project is based off of (stolen from) the [crystal-gauntlet](https://git.oa
 
 ## why?
 
-i've run out of ideas.
+i'm trying to learn some rust, and this is a solid choice. most GDPS solutions out there are pretty garbage, to say the least.
 
 ### features
 
@@ -17,35 +17,40 @@ i've run out of ideas.
 
 ## build
 
-### migrating databases
+`cargo build --release`
 
-- run `cargo install diesel_cli --no-default-features --features postgres`
-- run `diesel migration run`
+## configuration
 
-### testing
+copy `.env.example` to `.env` and fill it out, same for `config.example.toml` to `config.toml`
 
-- run `cargo run`
+## setup
 
-### building
+make sure you have `sqlx-cli` by running `cargo install sqlx-cli`
 
-- run `cargo build --release`
+run `sqlx database setup`
+
+then finally run the server with `cargo run`
+
+## CLI tools
+
+add `--help` or `-h` when calling the binary for special tools, such as patching executables.
 
 ## todo
 
-- User icons in account management pages
-- Flesh out account management page
-- Account settings page
-- Better web design (make formatting more consistant)
-- Use chrono for dates in database, add recent
+- add get levels search back (find how to easily do dynamic queries)
+- user icons in account management pages
+- account settings page
+- better web design (make formatting more consistant)
+- use chrono for dates in database
 - 2.2's friends only unlisted
-- Dailies, weeklies, events(?)
-- Moderation utilities
-- Better song support
-- Cache authentication
-- Panic less
-- Make a proper rank system (reuploading, uploading music, rating, etc.)
-- Use serde to make the forms whateverCaseThisIs rather than breaking our lint convention
-- Swap to `sqlx` im gonna be honest `diesel` is pretty shit.
-- Swap to `sqlite` from `postgres`. Postgres feels too clunky and it just solos honestly
-- Add back `realip` header support
-- Add configurable form limits
+- dailies, weeklies, events(?)
+- moderation utilities
+- better song support
+- cache authentication (redis or mem)
+- make a proper rank system (reuploading, uploading music, rating, etc.)
+- use serde to make the forms whateverCaseThisIs rather than breaking our lint convention
+- add back `realip` header support
+- add configurable form limits
+- nix
+- clean up difficulty/demon difficulties. It's fucking VILE.
+- panic less, use results

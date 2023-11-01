@@ -1,14 +1,18 @@
 CREATE TABLE users (
-    id            SERIAL   PRIMARY KEY,
-
-    -- if `registered`, use account_id, else, use udid
+    id            INTEGER  NOT NULL   PRIMARY KEY,
+    
+    -- on a registered account, account_id refers to the
+    -- account ID - however, pre 2.0, instead udid referred
+    -- to the user's UUID or UDID, depending on platform.
+    -- UUID and UDID are unique ids assigned for green
+    -- username users
+    --
+    -- in short, if `registered`, use account_id, else, use udid
     udid          TEXT,
     account_id    INTEGER  references accounts(id),
     registered    INTEGER  NOT NULL,
 
-    -- idk why but we get weird errors if we use `COLLATE case_insensitive`
-    -- maybe troubleshoot later, this works fine for now.
-    username  TEXT  NOT NULL, -- COLLATE case_insensitive,
+    username  TEXT  NOT NULL  COLLATE NOCASE,
 
     stars           INTEGER  NOT NULL  DEFAULT 0,
     demons          INTEGER  NOT NULL  DEFAULT 0,
@@ -34,8 +38,8 @@ CREATE TABLE users (
     special      INTEGER  NOT NULL  DEFAULT 0,
     glow         INTEGER  NOT NULL  DEFAULT 0,
 
-    created_at   TEXT    NOT NULL  DEFAULT (TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS')),
-    last_played  TEXT    NOT NULL  DEFAULT (TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS')),
+    created_at   TEXT    NOT NULL  DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'now')),
+    last_played  TEXT    NOT NULL  DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'now')),
 
     is_banned         INTEGER  NOT NULL  DEFAULT 0,
     is_banned_upload  INTEGER  NOT NULL  DEFAULT 0

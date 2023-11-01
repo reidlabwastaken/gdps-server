@@ -2,8 +2,6 @@ use rocket::form::Form;
 use rocket::http::Status;
 use rocket::response::status;
 
-use diesel::prelude::*;
-
 use crate::helpers;
 use crate::db;
 
@@ -17,46 +15,43 @@ pub struct FromLoginAccount {
 }
 
 #[post("/accounts/loginGJAccount.php", data = "<input>")]
-pub fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static str> {
-    let connection = &mut db::establish_connection_pg();
+pub async fn login_account(input: Form<FromLoginAccount>) -> status::Custom<&'static str> {
+    let connection = &mut db::establish_sqlite_conn().await;
 
-    if input.userName != helpers::clean::clean_no_space(input.userName.as_ref()) {
+    let username = helpers::clean::clean_basic(input.userName.as_ref());
+    
+    let password = input.password.clone();
+    let gjp = input.gjp.clone();
+    let gjp2 = input.gjp2.clone();
+
+    if input.userName != username {
         return status::Custom(Status::Ok, "-4")
     }
 
-    // gjp2 checks dont matter, its hashed, gjp checks would break bc its base64, and why does this check exist if its just for logging in robtop this is useless it doesnt provide security we already did the security on the register account u fucking faggot im really bored of working on this but im also excited to see if it works deepwoken solos mid dash
-    match input.password.clone() {
-        Some(password_val) => {
-            if password_val.len() < 6 {
-                return status::Custom(Status::Ok, "-8")
-            }
-        },
-        None => {}
+    // why does this check exist? it's kinda useless
+    if let Some(password) = password {
+        if password.len() < 6 {
+            return status::Custom(Status::Ok, "-8")
+        }
     }
 
-    if input.userName.len() < 3 {
+    if username.len() < 3 {
         return status::Custom(Status::Ok, "-9")
     }
 
-    // account verification
-    {
-        use db::schema::accounts::dsl::*;
+    let result = sqlx::query_scalar!("SELECT id FROM accounts WHERE username = ?", username)
+        .fetch_one(connection)
+        .await;
 
-        let query_result = accounts
-            .select(id)
-            .filter(username.eq(input.userName.clone()))
-            .get_result::<i32, >(connection);
+    match result {
+        Ok(account_id_val) => {
+            let user_id_val = helpers::accounts::get_user_id_from_account_id(account_id_val).await;
 
-        match query_result {
-            Ok(account_id_val) => {
-                let user_id_val = helpers::accounts::get_user_id_from_account_id(account_id_val);
-
-                match helpers::accounts::auth(account_id_val, input.password.clone(), input.gjp.clone(), input.gjp2.clone()) {
-                    Ok(_) => return status::Custom(Status::Ok, Box::leak(format!("{},{}", user_id_val, account_id_val).into_boxed_str())),
-                    Err(_) => return status::Custom(Status::Ok, "-11")
-                }
-            },
-            Err(_) => return status::Custom(Status::Ok, "-1")
-        }
+            match helpers::accounts::auth(account_id_val, input.password.clone(), input.gjp.clone(), input.gjp2.clone()).await {
+                Ok(_) => return status::Custom(Status::Ok, Box::leak(format!("{},{}", user_id_val, account_id_val).into_boxed_str())),
+                Err(_) => return status::Custom(Status::Ok, "-11")
+            }
+        },
+        Err(_) => return status::Custom(Status::Ok, "-1")
     }
 }

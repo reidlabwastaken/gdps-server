@@ -1,57 +1,51 @@
 use std::sync::RwLock;
 
-use diesel::prelude::*;
-
 use crate::db;
 
 pub const REUPLOAD_USER_NAME: &str = "reupload";
 
-pub static REUPLOAD_ACCOUNT_ID: RwLock<i32> = RwLock::new(0);
+pub static REUPLOAD_ACCOUNT_ID: RwLock<i64> = RwLock::new(0);
 
-pub fn init() {
-    let connection = &mut db::establish_connection_pg();
+pub async fn init() {
+    let mut connection = db::establish_sqlite_conn().await;
 
-    use db::schema::{accounts, users};
-    use db::models::{Account, NewAccount, User, NewUser};
+    let result = sqlx::query!("SELECT id FROM accounts WHERE username = ?", REUPLOAD_USER_NAME)
+        .fetch_one(&mut connection)
+        .await;
 
-    match accounts::table
-        .filter(accounts::username.eq(REUPLOAD_USER_NAME))
-        .select(accounts::id)
-        .get_result::<i32, >(connection) {
-            Ok(reupload_acc_id) => {
-                let mut write_lock = REUPLOAD_ACCOUNT_ID.write().expect("poisoned lock!!");
-                *write_lock = reupload_acc_id;
-            },
-            Err(_) => {
-                let new_account = NewAccount {
-                    username: REUPLOAD_USER_NAME.to_string(),
-                    gjp2: "!".to_string(),
-                    password: "!".to_string(),
-                    email: "".to_string()
-                };
+    match result {
+        Ok(result) => {
+            let mut write_lock = REUPLOAD_ACCOUNT_ID.write().expect("poisoned lock");
+            *write_lock = result.id;
+        },
+        Err(_) => {
+            let new_account = sqlx::query!(
+                "INSERT INTO accounts (username, gjp2, password, email) VALUES (?, ?, ?, ?)",
+                REUPLOAD_USER_NAME,
+                "!",
+                "!",
+                ""
+            )
+                .execute(&mut connection)
+                .await
+                .expect("error saving the new account");
 
-                let inserted_account = diesel::insert_into(accounts::table)
-                    .values(&new_account)
-                    .get_result::<Account, >(connection)
-                    .expect("error saving the new account");
+            let reupload_acc_id = new_account.last_insert_rowid() as i64;
 
-                let reupload_acc_id = inserted_account.id;
+            sqlx::query!(
+                "INSERT INTO users (account_id, username, registered) VALUES (?, ?, ?)",
+                reupload_acc_id,
+                REUPLOAD_USER_NAME,
+                1
+            )
+                .execute(&mut connection)
+                .await
+                .expect("error saving the new user");
 
-                let new_user = NewUser {
-                    account_id: inserted_account.id,
-                    username: REUPLOAD_USER_NAME.to_string(),
-                    registered: 1
-                };
+            let mut write_lock = REUPLOAD_ACCOUNT_ID.write().expect("poisoned lock");
+            *write_lock = reupload_acc_id;
 
-                diesel::insert_into(users::table)
-                    .values(&new_user)
-                    .get_result::<User, >(connection)
-                    .expect("error saving the new user");
-
-                let mut write_lock = REUPLOAD_ACCOUNT_ID.write().expect("poisoned lock!!");
-                *write_lock = reupload_acc_id;
-
-                println!("created reupload account, id: {}", reupload_acc_id);
-            }
+            println!("created reupload account, id: {}", reupload_acc_id);
         }
+    }
 }

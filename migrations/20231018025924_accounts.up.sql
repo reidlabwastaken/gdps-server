@@ -1,13 +1,7 @@
-CREATE COLLATION case_insensitive (
-    provider = icu,
-    locale = 'und-u-ks-level2',
-    deterministic = false
-);
-
 CREATE TABLE accounts (
-    id  SERIAL  PRIMARY KEY,
+    id  INTEGER  NOT NULL  PRIMARY KEY,
 
-    username  VARCHAR(20)   NOT NULL  COLLATE case_insensitive  UNIQUE,
+    username  VARCHAR(20)   NOT NULL  COLLATE NOCASE  UNIQUE,
     gjp2      TEXT          NOT NULL, -- argon2 hashed (rubrub uses bcrypt but oh well)
     password  TEXT          NOT NULL, -- argon2 hashed (rubrub uses bcrypt but oh well)
     email     VARCHAR(254)  NOT NULL,
@@ -25,5 +19,5 @@ CREATE TABLE accounts (
     twitter_url  VARCHAR(20),
     twitch_url   VARCHAR(20),
 
-    created_at   TEXT   NOT NULL  DEFAULT (TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS'))
+    created_at   TEXT    NOT NULL  DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'now'))
 );

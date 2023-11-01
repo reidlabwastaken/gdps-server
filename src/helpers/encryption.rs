@@ -29,7 +29,7 @@ pub fn decode_gjp(gjp: String) -> String {
     return xor_decoded
 }
 
-pub fn gen_multi(level_hash_data: Vec<(i32, i32, bool)>) -> String {
+pub fn gen_multi(level_hash_data: Vec<(i64, i32, bool)>) -> String {
     let mut input_str = String::new();
 
     for (_index, val) in level_hash_data.iter().enumerate() {

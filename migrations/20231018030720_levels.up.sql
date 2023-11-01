@@ -1,11 +1,11 @@
 CREATE TABLE levels (
-    id           SERIAL  PRIMARY KEY,
-    created_at   TEXT    NOT NULL  DEFAULT (TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS')),
-    modified_at  TEXT    NOT NULL  DEFAULT (TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS.MS')),
+    id           INTEGER  NOT NULL  PRIMARY KEY,
+    created_at   TEXT    NOT NULL  DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'now')),
+    modified_at  TEXT    NOT NULL  DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'now')),
 
     name         VARCHAR(20)   NOT NULL,
     user_id      INTEGER       NOT NULL  references users(id),
-    description  VARCHAR(140)  NOT NULL  DEFAULT '',
+    description  VARCHAR(140)  NOT NULL  DEFAULT "",
     original     INTEGER,
 
     game_version    INTEGER  NOT NULL,
@@ -16,8 +16,8 @@ CREATE TABLE levels (
     unlisted         INTEGER  NOT NULL  DEFAULT 0,
 
     version     INTEGER  NOT NULL  DEFAULT 0,
-    extra_data  BYTEA     NOT NULL,
-    level_info  BYTEA     NOT NULL,
+    extra_data  BLOB     NOT NULL,
+    level_info  BLOB     NOT NULL,
 
     editor_time         INTEGER  NOT NULL,
     editor_time_copies  INTEGER  NOT NULL,

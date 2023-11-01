@@ -12,11 +12,11 @@ use rocket::data::{Limits, ToByteUnit};
 
 use rocket_dyn_templates::Template;
 
-mod db;
-mod helpers;
-mod endpoints;
-mod template_endpoints;
 mod config;
+mod db;
+mod endpoints;
+mod helpers;
+mod template_endpoints;
 
 #[get("/<file..>")]
 async fn files(file: PathBuf) -> Option<NamedFile> {
@@ -24,14 +24,14 @@ async fn files(file: PathBuf) -> Option<NamedFile> {
 }
 
 #[launch]
-fn rocket() -> _ {
+async fn rocket() -> _ {
     // init stuff
-    crate::helpers::reupload::init();
+    crate::helpers::reupload::init().await;
 
     // data directories
     // unhardcore this maybe?
-    fs::create_dir_all(config::config_get_with_default("db.data_folder", "data")).expect("failed to create data directory!");
-    fs::create_dir_all(format!("{}/levels", config::config_get_with_default("db.data_folder", "data"))).expect("failed to create data directory for levels");
+    fs::create_dir_all(config::config_get_with_default("db.data_folder", "data".to_string())).expect("failed to create data directory!");
+    fs::create_dir_all(format!("{}/levels", config::config_get_with_default("db.data_folder", "data".to_string()))).expect("failed to create data directory for levels");
     
     rocket::build()
         // conf
@@ -57,10 +57,9 @@ fn rocket() -> _ {
             files
         ]) 
         // https://www.youtube.com/watch?v=_pLrtsf5yfE
-        .mount(config::config_get_with_default("general.append_path", "/"), routes![
+        .mount(format!("/{}", config::config_get_with_default("general.append_path", "".to_string())), routes![
             endpoints::accounts::login_account::login_account,
             endpoints::accounts::register_account::register_account,
-            endpoints::accounts::update_account_settings::update_account_settings,
 
             endpoints::users::get_users::get_users,
 
@@ -68,6 +67,6 @@ fn rocket() -> _ {
             endpoints::levels::get_levels::get_levels,
             endpoints::levels::upload_level::upload_level
         ])
-        // so templates work i think
+        // so templates work
         .attach(Template::fairing())
 }
