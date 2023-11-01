@@ -727,7 +727,6 @@ dependencies = [
  "serde_json",
  "sha",
  "sqlx",
- "tempfile",
  "toml",
 ]
 
